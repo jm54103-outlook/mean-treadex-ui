@@ -8,6 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthenService {
+  
 
   private apiUrl = 'http://localhost:4200/api'; // URL ของ API ที่ใช้ตรวจสอบตัวตน
   private authTokenKey = 'auth_token'; // ชื่อ key ที่ใช้เก็บ token ใน localStorage
