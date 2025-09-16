@@ -11,4 +11,10 @@
   button {
     width: 100%;
   }
+
+  .button-container {
+    display: flex; /* ใช้ Flexbox */
+    justify-content: space-evenly; /* วางปุ่มให้ห่างกันเท่ากัน */
+    gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+  }
   

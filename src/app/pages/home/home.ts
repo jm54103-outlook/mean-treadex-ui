@@ -5,9 +5,10 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-home',  
   imports: [MatButtonModule,],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrl: './home.css',
 })
+
 export class HomeComponent  {
-  
+  message = "Hello World !!!";
   
 }

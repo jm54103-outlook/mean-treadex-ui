@@ -21,9 +21,15 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
-              }
-            ],
+                "input": "src/assets/json/",
+                "output": "/api"                
+              },
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "/"                
+              }              
+            ],                       
             "styles": [
               "src/custom-theme.scss",
               "src/styles.css"

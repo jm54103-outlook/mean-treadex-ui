@@ -1,21 +1,21 @@
 <mat-card class="login-card">
     <mat-card-header>
       <mat-card-title>Login</mat-card-title>
-    </mat-card-header>
-  
+    </mat-card-header>  
     <mat-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" required>          
+          <input matInput #email formControlName="email" type="email" (keydown.enter)="onEnter(email, password)" required>          
         </mat-form-field>
-  
         <mat-form-field appearance="fill">
           <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" required>         
-        </mat-form-field>
-  
-        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
-      </form>
+          <input matInput #password formControlName="password" type="password" (keydown.enter)="onEnterNextButton(password, loginButton)" required>         
+        </mat-form-field>  
+        <div class="button-container">
+          <button mat-raised-button #loginButton color="primary" type="submit" (keydown.enter)="onEnterLogin()" [disabled]="loginForm.invalid">Login</button>
+          <button mat-raised-button #cancelButton color="primary" type="reset" >Cancel</button>
+        </div>       
+      </form>     
     </mat-card-content>
   </mat-card>
