@@ -7,6 +7,7 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
+<!--
 <style>
   :host {
     --bright-blue: oklch(51.01% 0.274 263.83);
@@ -63,7 +64,7 @@
 
   main {
     width: 100%;
-    min-height: 100%;
+    min-height: 800px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,7 +81,7 @@
     display: flex;
     justify-content: space-around;
     width: 100%;
-    max-width: 700px;
+    max-width: 1800px;
     margin-bottom: 3rem;
   }
 
@@ -167,7 +168,7 @@
     fill: var(--gray-900);
   }
 
-  @media screen and (max-width: 650px) {
+  @media screen and (max-width: 1600px) {
     .content {
       flex-direction: column;
       width: max-content;
@@ -181,7 +182,21 @@
     }
   }
 </style>
+-->
 
+<style>
+  main {
+    width: 100%;
+    background-color:burlywood;
+    min-height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    box-sizing: inherit;
+    position: relative;
+  }
+</style>
 <main class="main">
   <router-outlet></router-outlet>     
 </main>

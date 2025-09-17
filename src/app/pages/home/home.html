@@ -1,5 +1,32 @@
-<p>home works!</p>
+<mat-drawer-container class="drawer-container">
+  <mat-drawer mode="side" opened="true">Drawer content
+    <mat-tree #tree [dataSource]="dataSource" [childrenAccessor]="childrenAccessor">
+      <!-- This is the tree node template for leaf nodes -->
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+        <!-- use a disabled button to provide padding for tree leaf -->
+        <mat-icon>person</mat-icon>
+        &nbsp;
+        {{node.name}}
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding matTreeNodeToggle
+                    [cdkTreeNodeTypeaheadLabel]="node.name">
+        <button matIconButton matTreeNodeToggle
+                [attr.aria-label]="'Toggle ' + node.name">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{tree.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        {{node.name}}
+      </mat-tree-node>
+    </mat-tree>
 
-<button mat-button>Click Me</button>
-
-{{message}}
+  </mat-drawer>
+  <mat-drawer-content style="width:1500px">Main content
+    <mat-tab-group>
+      <mat-tab label="First"> Content 1 </mat-tab>
+      <mat-tab label="Second"> Content 2 </mat-tab>
+      <mat-tab label="Third"> Content 3 </mat-tab>
+    </mat-tab-group>
+  </mat-drawer-content>
+</mat-drawer-container>
