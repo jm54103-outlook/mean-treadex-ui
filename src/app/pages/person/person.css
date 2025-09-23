@@ -3,3 +3,14 @@
     margin: 50px auto;
     padding: 20px;
 }
+
+mat-card-title {
+    background-color: gray;
+    color: black;
+    padding: 5px;
+}
+
+mat-card-footer{
+    border-top: gray solid;  
+    padding-top: 15px;
+}
