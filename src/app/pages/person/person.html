@@ -1,1 +1,68 @@
 <p>person works!</p>
+<mat-card class="person-card">
+<mat-card-title>
+    PERSON    
+</mat-card-title>
+<mat-card-subtitle>&nbsp;&nbsp;sub title</mat-card-subtitle>
+<mat-card-content>
+    <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline"  style="width:150px;">
+            <mat-label>คำนำหน้าชื่อ</mat-label>
+            <mat-select #titleName formControlName="titleName">
+                <mat-option>(เลือกรายการ)</mat-option>
+                <mat-option value="นาย">นาย</mat-option>
+                <mat-option value="นาง">นาง</mat-option>
+                <mat-option value="นางสาว">นางสาว</mat-option>
+            </mat-select>
+        </mat-form-field>     
+        &nbsp;
+        <mat-form-field appearance="outline" >
+            <mat-label>ชื่อ</mat-label>
+            <input matInput #firstName formControlName="firstName" type="text"   required>          
+        </mat-form-field> 
+        &nbsp;   
+        <mat-form-field appearance="outline" >
+            <mat-label>นามสกุล</mat-label>
+            <input matInput #lastName formControlName="lastName" type="text" (keydown.enter)="onEnter(lastName, idNo)"  required>          
+        </mat-form-field>    
+        &nbsp;
+        <mat-form-field appearance="outline" >
+            <mat-label>หมายเลขประจำตัวประชาชน</mat-label>
+            <input matInput #idNo formControlName="idNo" type="text" (keydown.enter)="onEnter(idNo, firstName)" required>          
+        </mat-form-field>   
+
+        <!--
+        <mat-form-field>
+            <mat-label>วันเกิด</mat-label>
+            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker">
+            <mat-datepicker #datepicker/>
+            <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+        </mat-form-field>   
+        -->  
+        &nbsp;
+        <table style="border:0px;">
+            <tr><td>เพศ</td></tr>
+            <tr>
+                <td>
+                <mat-radio-group aria-label="เพศ" #gender  formControlName="gender">
+                    <mat-radio-button value="M">ชาย</mat-radio-button>
+                    <mat-radio-button value="F">หญิง</mat-radio-button>
+                    <mat-radio-button value="N">ไม่ระบุ</mat-radio-button>
+                </mat-radio-group>  
+                </td>
+            </tr>
+        </table>
+
+        
+    </form>
+    <p>
+        &nbsp; &nbsp;
+    </p>
+</mat-card-content>
+<mat-card-footer style="align-items:center;">
+    <button mat-raised-button #submitButton color="primary" type="submit" (click)="onSubmit()">submit</button>
+    &nbsp;&nbsp;
+    <button mat-raised-button #cancelButton color="primary" type="reset" (click)="onCancel()">Cancel</button>   
+</mat-card-footer>     
+</mat-card>
+   
