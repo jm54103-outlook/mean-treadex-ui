@@ -1,14 +1,23 @@
 <p>person works!</p>
+<li>validate mix,max string length</li>
+<li>validate mix,max numeric value</li>
+<li>format date วว/ดด/ปปปป</li>
+<li>format decimal</li>
+<li>onBlur()</li>
+<li>binding Model to FormGroup</li>
+<li>binding FormGroup to Model</li>
+<li>localization support</li>
 <mat-card class="person-card">
 <mat-card-title >
     PERSON    
 </mat-card-title>
-<mat-card-subtitle>&nbsp;&nbsp;sub title</mat-card-subtitle>
-<mat-card-content>
+<mat-card-subtitle>บุคคลธรรมดา</mat-card-subtitle>
+<mat-card-content>    
     <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline"  >
+        &nbsp;
+        <mat-form-field appearance="outline"  style="width:200px;">
             <mat-label>คำนำหน้าชื่อ</mat-label>
-            <mat-select #titleName formControlName="titleName">
+            <mat-select #titleName formControlName="titleName" >
                 <mat-option>(เลือกรายการ)</mat-option>
                 <mat-option value="นาย">นาย</mat-option>
                 <mat-option value="นาง">นาง</mat-option>
@@ -16,27 +25,43 @@
             </mat-select>
         </mat-form-field>     
         &nbsp;
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline" style="width:300px;">
             <mat-label>ชื่อ</mat-label>
-            <input matInput #firstName formControlName="firstName" type="text"   required>          
+            <input matInput #firstName formControlName="firstName" type="text"  required>          
         </mat-form-field> 
         &nbsp;   
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline" style="width:300px;">
             <mat-label>นามสกุล</mat-label>
             <input matInput #lastName formControlName="lastName" type="text" (keydown.enter)="onEnter(lastName, idNo)"  required>          
         </mat-form-field>    
         <br/>&nbsp;
-        <mat-form-field appearance="outline" >
+        <mat-form-field appearance="outline" style="width:200px;" >
             <mat-label>หมายเลขประจำตัวประชาชน</mat-label>
             <input matInput #idNo formControlName="idNo" type="text" (keydown.enter)="onEnter(idNo, firstName)" required>          
-        </mat-form-field>   
-        <br/>&nbsp;
-        <mat-form-field appearance="outline" >
+        </mat-form-field>          
+        &nbsp;
+        <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>วันเกิด</mat-label>
-            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker">
+            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker"  >
             <mat-datepicker #datepicker/>
             <mat-datepicker-toggle [for]="datepicker" matSuffix/>
         </mat-form-field>   
+        <br/>&nbsp;
+        <mat-form-field appearance="outline" style="width:200px;">
+            <mat-label>ส่วนสูง</mat-label>
+            <input matInput #height formControlName="height" type="number" step="1" min="120" max="200" >            
+        </mat-form-field>   
+        &nbsp;
+        <mat-form-field appearance="outline" style="width:200px;">
+            <mat-label>น้ำหนัก</mat-label>
+            <input matInput #weight formControlName="weight" type="number" step="0.01" min="50" max="180" >            
+        </mat-form-field>   
+        &nbsp;
+        <mat-form-field appearance="outline" style="width:200px;">
+            <mat-label>รายได้(เงินเดือน)</mat-label>
+            <input matInput #salary formControlName="salary" type="text" (input)="onInputDecimalChange($event)"  > 
+            <mat-hint align="end">{{ decimalPipe.transform(person.salary , '1.2-2')??"" }} บาท</mat-hint>
+        </mat-form-field>         
         <br/>&nbsp;
         <table style="border:0px;">
             <tr><td>เพศ</td></tr>
@@ -49,8 +74,7 @@
                 </mat-radio-group>  
                 </td>
             </tr>
-        </table>
-        
+        </table>        
     </form>
     <p>
         &nbsp; &nbsp;
