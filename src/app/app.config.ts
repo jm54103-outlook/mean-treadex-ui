@@ -1,8 +1,8 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { routes } from './app.routes';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 
 
 const MY_DATE_FORMAT = {
@@ -19,7 +19,8 @@ const MY_DATE_FORMAT = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT },
+      provideNativeDateAdapter(),
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
     { provide: MAT_DATE_LOCALE, useValue: 'th-TH', },
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),

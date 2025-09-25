@@ -42,9 +42,10 @@
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>วันเกิด</mat-label>
-            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker"  >
-            <mat-datepicker #datepicker/>
-            <mat-datepicker-toggle [for]="datepicker" matSuffix/>
+            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker" [(ngModel)]="person.birthDate"  >
+            <mat-datepicker #datepicker  />
+            <mat-datepicker-toggle [for]="datepicker" matSuffix/>            
+            <mat-hint align="end">{{ person.birthDate | date:'yyyy-MM-dd'}}</mat-hint>
         </mat-form-field>   
         <br/>&nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
@@ -59,8 +60,8 @@
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>รายได้(เงินเดือน)</mat-label>
-            <input matInput #salary formControlName="salary" type="text" (input)="onInputDecimalChange($event)"  > 
-            <mat-hint align="end">{{ decimalPipe.transform(person.salary , '1.2-2')??"" }} บาท</mat-hint>
+            <input matInput #salary formControlName="salary" type="text" (input)="onInputDecimalChange($event)" [(ngModel)]="person.salary"  > 
+            <mat-hint align="end">{{ person.salary| number:'1.2-2'}} บาท</mat-hint>
         </mat-form-field>         
         <br/>&nbsp;
         <table style="border:0px;">

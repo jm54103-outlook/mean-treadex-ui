@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,14 +8,17 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { provideNativeDateAdapter } from '@angular/material/core';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe,DatePipe } from '@angular/common';
+
 
 
 @Component({
   selector: 'app-person',
-  providers:[provideNativeDateAdapter(), DecimalPipe],
+  providers:[DecimalPipe],
   imports: [
+    DecimalPipe,
+    DatePipe,    
+    
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -49,9 +52,15 @@ export class PersonComponent {
      private fb: FormBuilder     
     ,private router: Router
     ,public decimalPipe: DecimalPipe
-    ) {   }
+    ) {   
+
+    }
+
+
 
   ngOnInit(): void {
+
+      
     this.personForm = this.fb.group({ 
       titleName:[this.person.titleName, [Validators.required]],   
       firstName:[this.person.firstName, [Validators.required]],
@@ -73,9 +82,6 @@ export class PersonComponent {
       this.personForm.controls[formKey].value;
       console.log(`${formKey}:${this.personForm.controls[formKey].value}`);
     });
-
-
-
     console.log(`${this.person.salary}`);
     console.log(`${this.person.birthDate}`);
   }
@@ -114,7 +120,7 @@ export class PersonComponent {
 
     console.log(`onInputDecimalChange:${formattedValue}`);
     
-    this.person.salary=decimalValue;
+
     
   }
 
