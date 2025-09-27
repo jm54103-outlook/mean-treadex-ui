@@ -1,11 +1,11 @@
-<p>person works!</p>
-<li>validate mix,max string length</li>
-<li>validate mix,max numeric value</li>
+
+<h1 i18n="@@welcomeMessage">ยินดีต้อนรับ</h1>
+<h1 i18n="@@homeTitle">Welcome to My Angular App!</h1>
+<p i18n="@@description">This is an Angular application demonstrating i18n support.</p>
+
 <li>format date วว/ดด/ปปปป</li>
 <li>format decimal</li>
 <li>onBlur()</li>
-<li>binding Model to FormGroup</li>
-<li>binding FormGroup to Model</li>
 <li>localization support</li>
 <mat-card class="person-card">
 <mat-card-title >
@@ -14,40 +14,45 @@
 <mat-card-subtitle>บุคคลธรรมดา</mat-card-subtitle>
 <mat-card-content>    
     <form [formGroup]="personForm" (ngSubmit)="onSubmit()">
-        &nbsp;
+        <p>&nbsp;</p>
+        <div>
         <mat-form-field appearance="outline"  style="width:200px;">
             <mat-label>คำนำหน้าชื่อ</mat-label>
             <mat-select #titleName formControlName="titleName" >
-                <mat-option>(เลือกรายการ)</mat-option>
-                <mat-option value="นาย">นาย</mat-option>
-                <mat-option value="นาง">นาง</mat-option>
-                <mat-option value="นางสาว">นางสาว</mat-option>
+                    <mat-option>(เลือกรายการ)</mat-option>
+                    <mat-option value="นาย">นาย</mat-option>
+                    <mat-option value="นาง">นาง</mat-option>
+                    <mat-option value="นางสาว">นางสาว</mat-option>
             </mat-select>
-        </mat-form-field>     
-        &nbsp;
+         </mat-form-field>     
+         &nbsp;
         <mat-form-field appearance="outline" style="width:300px;">
             <mat-label>ชื่อ</mat-label>
             <input matInput #firstName formControlName="firstName" type="text"  required>          
         </mat-form-field> 
-        &nbsp;   
+        &nbsp; 
         <mat-form-field appearance="outline" style="width:300px;">
             <mat-label>นามสกุล</mat-label>
             <input matInput #lastName formControlName="lastName" type="text" (keydown.enter)="onEnter(lastName, idNo)"  required>          
-        </mat-form-field>    
-        <br/>&nbsp;
+        </mat-form-field>     
+        </div>                      
+        <div>       
         <mat-form-field appearance="outline" style="width:200px;" >
             <mat-label>หมายเลขประจำตัวประชาชน</mat-label>
-            <input matInput #idNo formControlName="idNo" type="text" (keydown.enter)="onEnter(idNo, firstName)" required>          
-        </mat-form-field>          
+            <input matInput #idNo formControlName="idNo" type="text" (keydown.enter)="onEnter(idNo, firstName)" minlength="13" maxlength="13" required>  
+            <mat-error ngIf="get('idNo').hasError('maxlength')"><Label style="font-size:small">ความยาว 13 ตัวอักษร</Label></mat-error>        
+        </mat-form-field>  
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>วันเกิด</mat-label>
-            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker" [(ngModel)]="person.birthDate"  >
+            <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker"   >
             <mat-datepicker #datepicker  />
             <mat-datepicker-toggle [for]="datepicker" matSuffix/>            
             <mat-hint align="end">{{ person.birthDate | date:'yyyy-MM-dd'}}</mat-hint>
-        </mat-form-field>   
-        <br/>&nbsp;
+        </mat-form-field> 
+        </div>        
+        &nbsp;         
+        <div>        
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>ส่วนสูง</mat-label>
             <input matInput #height formControlName="height" type="number" step="1" min="120" max="200" >            
@@ -60,7 +65,7 @@
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>รายได้(เงินเดือน)</mat-label>
-            <input matInput #salary formControlName="salary" type="number" (input)="onInputDecimalChange($event)" [(ngModel)]="person.salary"  > 
+            <input matInput #salary formControlName="salary" type="number"  [(ngModel)]="person.salary"  > 
             <mat-hint align="end">{{ person.salary| number:'1.2-2'}} บาท</mat-hint>
         </mat-form-field>         
         <br/>&nbsp;
@@ -75,7 +80,8 @@
                 </mat-radio-group>  
                 </td>
             </tr>
-        </table>        
+        </table>  
+        </div>      
     </form>
     <p>
         &nbsp; &nbsp;

@@ -8,9 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DecimalPipe,DatePipe } from '@angular/common';
-
-
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-person',
@@ -18,7 +16,6 @@ import { DecimalPipe,DatePipe } from '@angular/common';
   imports: [
     DecimalPipe,
     DatePipe,    
-    
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -38,8 +35,8 @@ export class PersonComponent {
   
   person = {
     titleName:'นาง',
-    firstName:'สมหญิง',
-    lastName:'จริงใจ',
+    firstName:'สมหญิงyy',
+    lastName:'จริงใจot',
     idNo:'1234567890123',
     birthDate:'2025-02-01',
     gender:'N',
@@ -52,38 +49,54 @@ export class PersonComponent {
      private fb: FormBuilder     
     ,private router: Router
     ,public decimalPipe: DecimalPipe
-    ) {   
-
-    }
+  ) {}
 
 
-
-  ngOnInit(): void {
-
-      
+  ngOnInit(): void {      
     this.personForm = this.fb.group({ 
-      titleName:[this.person.titleName, [Validators.required]],   
-      firstName:[this.person.firstName, [Validators.required]],
-      lastName:[this.person.lastName, [Validators.required]],
-      idNo:[this.person.idNo, [Validators.required]],
-      birthDate:[this.person.birthDate, [Validators.required]],
-      gender:[this.person.gender, [Validators.required]],
-      height:[this.person.height,],
-      weight:[this.person.weight,],
-      salary:[this.person.salary,]
-    });    
+      titleName:[null, [Validators.required]],   
+      firstName:[null, [Validators.required]],
+      lastName:[null, [Validators.required]],
+      idNo:[null,[Validators.required, Validators.minLength, Validators.maxLength]],
+      birthDate:[null, [Validators.required]],
+      gender:[null, [Validators.required]],
+      height:[null,],
+      weight:[null,],
+      salary:[null,]
+    });      
+    this.bind(this.person);
+  }
+
+  get(key:any){
+    return this.personForm.controls[key].value;
+  }
+
+  bind(model:any)
+  {
+    console.clear();
+    console.log(`bind()`);
+    const formKeys = Object.keys(model);           
+    formKeys.forEach(formKey => { 
+      let modelKey:any;
+      modelKey=formKey;      
+      console.log(`${modelKey}:${this.getValue(this.person, modelKey)}`);
+      this.personForm.controls[formKey].setValue(this.getValue(this.person, modelKey));      
+    });  
+  }
+
+  // ฟังก์ชันที่ดึงค่าโดยใช้ key แบบ dynamic
+  getValue<T>(model: T, key: keyof T) {
+     return model[key];
   }
 
   onSubmit(): void {
     console.clear();
-    console.log('onSubmit()');
+    console.log(`onSubmit()`);
     const formKeys = Object.keys(this.personForm.controls);
     formKeys.forEach(formKey => {
       this.personForm.controls[formKey].value;
       console.log(`${formKey}:${this.personForm.controls[formKey].value}`);
-    });
-    console.log(`${this.person.salary}`);
-    console.log(`${this.person.birthDate}`);
+    });    
   }
 
   onCancel(): void {
