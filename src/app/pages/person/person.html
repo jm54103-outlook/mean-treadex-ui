@@ -60,7 +60,7 @@
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>รายได้(เงินเดือน)</mat-label>
-            <input matInput #salary formControlName="salary" type="text" (input)="onInputDecimalChange($event)" [(ngModel)]="person.salary"  > 
+            <input matInput #salary formControlName="salary" type="number" (input)="onInputDecimalChange($event)" [(ngModel)]="person.salary"  > 
             <mat-hint align="end">{{ person.salary| number:'1.2-2'}} บาท</mat-hint>
         </mat-form-field>         
         <br/>&nbsp;
