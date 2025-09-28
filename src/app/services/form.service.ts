@@ -22,9 +22,7 @@ export class FormService {
         let options: Intl.DateTimeFormatOptions = {
           day: "2-digit"
          ,month: "2-digit"
-         ,year: "numeric"
-         ,hour: "2-digit" 
-         ,minute: "2-digit"
+         ,year: "numeric"        
       };    
       return date.toLocaleString('th',options);
     }

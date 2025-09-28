@@ -41,7 +41,8 @@
         <mat-form-field appearance="outline" style="width:200px;" >
             <mat-label>หมายเลขประจำตัวประชาชน</mat-label>
             <input matInput #idNo formControlName="idNo" type="text" (keydown.enter)="onEnter(idNo, firstName)" minlength="13" maxlength="13" required>  
-            <mat-error ngIf="get('idNo').hasError('maxlength')"><Label style="font-size:small">ความยาว 13 ตัวอักษร</Label></mat-error>        
+            <mat-error ngIf="get('idNo').hasError('maxlength')"><Label style="font-size:small">ความยาว 13 ตัวอักษร</Label></mat-error>    
+            <mat-hint align="end">{{ this.getFieldValue('idNo')?.toString()?.length}}/13</mat-hint>    
         </mat-form-field>  
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
