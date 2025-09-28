@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
       provideNativeDateAdapter(),
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
-    { provide: MAT_DATE_LOCALE, useValue: 'en-US', },
+    { provide: MAT_DATE_LOCALE, useValue: 'th-TH', },
     { provide: LOCALE_ID, useValue: 'th' },       
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),

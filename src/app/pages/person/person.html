@@ -1,12 +1,13 @@
 
-<h1 i18n="@@welcomeMessage">ยินดีต้อนรับ</h1>
+<h1 i18n="@@welcomeMessage">Welcome</h1>
 <h1 i18n="@@homeTitle">Welcome to My Angular App!</h1>
 <p i18n="@@description">This is an Angular application demonstrating i18n support.</p>
 
-<li>format date วว/ดด/ปปปป</li>
-<li>format decimal</li>
 <li>onBlur()</li>
-<li>localization support</li>
+<li>AlertDialogBox</li>
+<li>ConfirmAlertDialogBox</li>
+<li>getLocale Setting</li>
+
 <mat-card class="person-card">
 <mat-card-title >
     PERSON    
@@ -48,7 +49,7 @@
             <input matInput #birthDate formControlName="birthDate" [matDatepicker]="datepicker"   >
             <mat-datepicker #datepicker  />
             <mat-datepicker-toggle [for]="datepicker" matSuffix/>            
-            <mat-hint align="end">{{ person.birthDate | date:'yyyy-MM-dd'}}</mat-hint>
+            <mat-hint align="end">{{ this.fs.formatTHDate(this.getFieldValue('birthDate'))}}</mat-hint>
         </mat-form-field> 
         </div>        
         &nbsp;         
@@ -65,8 +66,8 @@
         &nbsp;
         <mat-form-field appearance="outline" style="width:200px;">
             <mat-label>รายได้(เงินเดือน)</mat-label>
-            <input matInput #salary formControlName="salary" type="number"  [(ngModel)]="person.salary"  > 
-            <mat-hint align="end">{{ person.salary| number:'1.2-2'}} บาท</mat-hint>
+            <input matInput #salary formControlName="salary" type="number"   > 
+            <mat-hint align="end">{{ getFieldValue('salary') | number:'1.2-2'}} บาท</mat-hint>
         </mat-form-field>         
         <br/>&nbsp;
         <table style="border:0px;">

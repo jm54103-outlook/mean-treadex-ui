@@ -9,13 +9,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DecimalPipe, DatePipe } from '@angular/common';
+import { FormService} from '../../services/form.service';
+
 
 @Component({
   selector: 'app-person',
-  providers:[DecimalPipe],
+  providers:[DecimalPipe,  DatePipe],
   imports: [
-    DecimalPipe,
-    DatePipe,    
+    DecimalPipe,    
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
@@ -35,10 +36,10 @@ export class PersonComponent {
   
   person = {
     titleName:'นาง',
-    firstName:'สมหญิงyy',
-    lastName:'จริงใจot',
+    firstName:'สมหญิง',
+    lastName:'จริงใจ',
     idNo:'1234567890123',
-    birthDate:'2025-02-01',
+    birthDate:new Date('1977-02-13'),
     gender:'N',
     height:180,
     weight:72,
@@ -46,12 +47,18 @@ export class PersonComponent {
   }
 
   constructor(
-     private fb: FormBuilder     
+     private fb: FormBuilder  
+    ,public fs: FormService   
     ,private router: Router
     ,public decimalPipe: DecimalPipe
-  ) {}
+    ,public datePipe: DatePipe
+  ) {
+    const now = new Date();           
+    console.log(`Now is :${fs.formatTHDate(now)}`);
+  }
 
-
+  
+   
   ngOnInit(): void {      
     this.personForm = this.fb.group({ 
       titleName:[null, [Validators.required]],   
@@ -64,29 +71,29 @@ export class PersonComponent {
       weight:[null,],
       salary:[null,]
     });      
-    this.bind(this.person);
+
+    this.bindModel(this.person);
+   
   }
 
-  get(key:any){
-    return this.personForm.controls[key].value;
-  }
 
-  bind(model:any)
+
+  bindModel(model:any)
   {
     console.clear();
     console.log(`bind()`);
     const formKeys = Object.keys(model);           
     formKeys.forEach(formKey => { 
-      let modelKey:any;
-      modelKey=formKey;      
-      console.log(`${modelKey}:${this.getValue(this.person, modelKey)}`);
-      this.personForm.controls[formKey].setValue(this.getValue(this.person, modelKey));      
+        let modelKey:any;
+        modelKey=formKey;      
+        console.log(`${modelKey}:${this.fs.getValue(this.person, modelKey)}`);
+        let value=this.fs.getValue(this.person, modelKey);
+        this.personForm.controls[formKey].setValue(value);      
     });  
   }
 
-  // ฟังก์ชันที่ดึงค่าโดยใช้ key แบบ dynamic
-  getValue<T>(model: T, key: keyof T) {
-     return model[key];
+  getFieldValue(formKey:string){
+    return this.personForm.controls[formKey].value;
   }
 
   onSubmit(): void {
@@ -94,8 +101,8 @@ export class PersonComponent {
     console.log(`onSubmit()`);
     const formKeys = Object.keys(this.personForm.controls);
     formKeys.forEach(formKey => {
-      this.personForm.controls[formKey].value;
-      console.log(`${formKey}:${this.personForm.controls[formKey].value}`);
+      let value=this.getFieldValue(formKey);
+      console.log(`${formKey}:${value}`);
     });    
   }
 
