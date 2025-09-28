@@ -1,0 +1,7 @@
+git add .
+git commit -m "Change Commit"
+git push
+
+
+git fetch
+git pull origin my_remote_branch
