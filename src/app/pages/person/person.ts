@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, model, signal} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,12 +10,17 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router } from '@angular/router';
 import { DecimalPipe, DatePipe } from '@angular/common';
 import { FormService} from '../../services/form.service';
+import { DialogAlertComponent } from '../../components/dialogs/dialog-alert.component/dialog-alert.component';
+import { DialogConfirmComponent } from '../../components/dialogs/dialog-confirm.component/dialog-confirm.component';
+import { MatDialog } from '@angular/material/dialog';
+import { popResultSelector } from 'rxjs/internal/util/args';
+
 
 
 @Component({
   selector: 'app-person',
   providers:[DecimalPipe,  DatePipe],
-  imports: [
+  imports: [    
     DecimalPipe,    
     MatCardModule,
     MatFormFieldModule,
@@ -30,10 +35,15 @@ import { FormService} from '../../services/form.service';
   templateUrl: './person.html',
   styleUrl: './person.css'
 })
+
+
+
 export class PersonComponent {
- 
-  personForm!:FormGroup; 
   
+  readonly dialog = inject(MatDialog);
+  
+  personForm!:FormGroup; 
+
   person = {
     titleName:'นาง',
     firstName:'สมหญิง',
@@ -55,11 +65,15 @@ export class PersonComponent {
   ) {
     const now = new Date();           
     console.log(`Now is :${fs.formatTHDate(now)}`);
-  }
-
-  
+  } 
    
   ngOnInit(): void {      
+        
+    this.build();
+
+  }
+
+  build(){
     this.personForm = this.fb.group({ 
       titleName:[null, [Validators.required]],   
       firstName:[null, [Validators.required]],
@@ -70,23 +84,23 @@ export class PersonComponent {
       height:[null,],
       weight:[null,],
       salary:[null,]
-    });      
-
-    this.bindModel(this.person);
-   
+    });  
+    this.refresh();
   }
 
-
+  refresh(){
+    console.log(`refresh()`);
+    this.bindModel(this.person);   
+  }
 
   bindModel(model:any)
   {
-    console.clear();
-    console.log(`bind()`);
+    console.clear();    
     const formKeys = Object.keys(model);           
     formKeys.forEach(formKey => { 
         let modelKey:any;
         modelKey=formKey;      
-        console.log(`${modelKey}:${this.fs.getValue(this.person, modelKey)}`);
+        //console.log(`${modelKey}:${this.fs.getValue(this.person, modelKey)}`);
         let value=this.fs.getValue(this.person, modelKey);
         this.personForm.controls[formKey].setValue(value);      
     });  
@@ -99,6 +113,29 @@ export class PersonComponent {
   onSubmit(): void {
     console.clear();
     console.log(`onSubmit()`);
+
+    //const dialogAlertRef = this.dialog.open(DialogAlertComponent,{});
+
+    const dialogConfirmRef = this.dialog.open(DialogConfirmComponent,
+      {
+        data: {title:"ยืนยัน", message:"ต้องการบันทึกข้อมูล?"},
+      })
+
+    dialogConfirmRef.afterClosed().subscribe(result=>{      
+      console.log(`The dialog was closed. result:${result}`);
+      if (result !== undefined) {
+        console.log(`${result}`);
+        if(result=='YES')
+        {
+          this.submit();
+        }     
+      }
+    });   
+  }
+
+  submit()
+  {
+    console.clear();
     const formKeys = Object.keys(this.personForm.controls);
     formKeys.forEach(formKey => {
       let value=this.getFieldValue(formKey);
@@ -137,11 +174,8 @@ export class PersonComponent {
 
     // ฟอร์แมตตัวเลขที่มีการคั่นหลักพัน
     formattedValue = this.decimalPipe.transform(decimalValue, '1.2-2')??"";
+    console.log(`onInputDecimalChange:${formattedValue}`);  
 
-    console.log(`onInputDecimalChange:${formattedValue}`);
-    
-
-    
   }
 
 }
