@@ -1,0 +1,59 @@
+<div class="container">
+    <!-- Left Panel -->
+    <div id="leftPanel" class="left-panel">
+        <h2>เมนูด้านซ้าย</h2>
+        <ul>
+            <li><a href="#">หน้าแรก</a></li>
+            <li><a href="#">เกี่ยวกับเรา</a></li>
+            <li><a href="#">บริการ</a></li>
+            <li><a href="#">ติดต่อเรา</a></li>
+        </ul>
+    </div>
+
+    <!-- Resizer (แบ่ง Left กับ Right Panel) -->
+    <div id="resizer" class="resizer"></div>
+
+    <!-- Right Panel -->
+    <div id="rightPanel" class="right-panel">
+        <h1>เนื้อหาหลัก</h1>
+        <p>นี่คือตัวอย่างเนื้อหาของ **Right Panel** ที่สามารถปรับขนาดได้</p>
+    </div>
+</div>
+
+
+
+<script>
+// script.js
+
+const resizer = document.getElementById('resizer');
+const leftPanel = document.getElementById('leftPanel');
+const rightPanel = document.getElementById('rightPanel');
+
+let isResizing = true;
+
+resizer.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    
+    // บันทึกตำแหน่งเริ่มต้นของ mouse
+    const startX = e.clientX;
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', () => {
+        isResizing = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+    });
+
+    function handleMouseMove(e) {
+        if (isResizing) {
+            const dx = e.clientX - startX;  // คำนวณการเคลื่อนที่ของ mouse
+            const newWidth = leftPanel.offsetWidth + dx;  // ความกว้างใหม่ของ Left Panel
+
+            // จำกัดขนาดของ Left Panel
+            if (newWidth > 100 && newWidth < window.innerWidth - 100) {
+                leftPanel.style.width = newWidth + 'px';
+            }
+        }
+    }
+});
+
+</script>

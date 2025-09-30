@@ -1,5 +1,6 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { MainComponent } from './pages/main/main';
 import { HomeComponent } from './pages/home/home';
 import { LoginComponent } from './pages/login/login';
 import { PersonComponent } from './pages/person/person';
@@ -8,7 +9,8 @@ import { AboutComponent } from './pages/about/about';
 
 
 export const routes: Routes = [  
-    { path: '', component: HomeComponent },
+    { path: '', component: MainComponent },
+    { path: 'home', component: HomeComponent },
     { path: 'login', component: LoginComponent },
     { path: 'person', component: PersonComponent },        
     { path: 'product', component: ProductComponent },  
