@@ -1,69 +1,38 @@
-/* styles.css */
+.container
+{
+    min-width:100vw;
+    height: 85vh;
+}
 
-/* กำหนดการตั้งค่าเบื้องต้น */
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+.toggle-menu
+{
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.header
+{
+  background-color: lightgray;
+  height: 65px;
+}
+
+/* เอฟเฟกต์เมื่อเมาส์ลากผ่าน (hover) */
+mat-toolbar-row:hover {
+    color: black; /* เปลี่ยนสีตัวอักษร */
+    background-color:lightblue; /* เปลี่ยนสีพื้นหลัง */
+    border-radius: 5px; /* เพิ่มมุมโค้ง */
+    transform: scale(1.1); /* ขยายขนาดเล็กน้อย */
+    transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.menu-icon {
+    padding: 0 14px;
+}
+
+.mat-drawer-content
+{
+    min-width: fit-content;
     height: 100%;
-}
-
-/* Container ที่ครอบทั้ง 2 Panel */
-.container {
-    display: flex;
-    height: 100vh; /* ให้ความสูงเต็มหน้าจอ */
-}
-
-/* Left Panel */
-.left-panel {
-    width: 250px; /* ความกว้างเริ่มต้นของ Left Panel */
-    background-color: #333;
-    color: white;
-    padding: 20px;
-    box-sizing: border-box;
-    height: 100%;
-    overflow-y: auto;
-}
-
-/* เมนูใน Left Panel */
-.left-panel ul {
-    list-style: none;
-    padding: 0;
-}
-
-.left-panel ul li {
-    margin-bottom: 15px;
-}
-
-.left-panel ul li a {
-    color: white;
-    text-decoration: none;
-}
-
-/* Resizer (แถบที่ใช้ปรับขนาด) */
-.resizer {
-    width: 10px;
-    background-color: #888;
-    cursor: ew-resize;
-    height: 100%;
-}
-
-/* Right Panel */
-.right-panel {
-    flex-grow: 1; /* ให้ส่วนนี้ยืดหยุ่นตามขนาดหน้าจอ */
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-sizing: border-box;
-    height: 100%;
-}
-
-/* ตัวอย่างเนื้อหาภายใน Right Panel */
-.right-panel h1 {
-    font-size: 2rem;
-    color: #333;
-}
-
-.right-panel p {
-    font-size: 1.2rem;
-    color: #666;
+    background-color:gray;
+    color: whitesmoke;
 }
