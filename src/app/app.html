@@ -1,21 +1,5 @@
-<style>
-  main {  
-    background-color:lavender; /* พื้นหลังสีเทา */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-height: 100%; /* ทำให้ content สูงสุดไม่เกินความสูงของ panel */   
-    overflow-y: auto; /* ถ้ามีเนื้อหามากเกินไป ให้มีการเลื่อน */
-    text-align: center;
-  }
-</style>
-<main class="main">
-    <!--
-    <router-outlet></router-outlet> 
-    -->
-</main>
 
+<div class="main">
 <header class="header">
   <mat-toolbar>
     <button matMiniFab  class="toggle-menu"  [style.visibility]="showToggleMenu ? 'visible' : 'hidden'"  (click)=onClickToggleMenu()>
@@ -25,7 +9,7 @@
     <span>TradEx</span>
   </mat-toolbar>
 </header>
-<mat-drawer-container class="container">
+<mat-drawer-container class="mat-drawer-container">
   <mat-drawer mode="side" [opened]="isOpenedMenu">        
       <mat-toolbar >
           <mat-toolbar-row #person class="menu-row" id="person" (click)="onClickMenu(person)">
@@ -66,6 +50,9 @@
       <mat-divider></mat-divider>
   </mat-drawer>
   <mat-drawer-content class="mat-drawer-content">
-    <router-outlet></router-outlet>  
+    <div style="background-color:brown;margin:5px;">
+      <router-outlet ></router-outlet>  
+    </div>
   </mat-drawer-content>
 </mat-drawer-container>
+</div>

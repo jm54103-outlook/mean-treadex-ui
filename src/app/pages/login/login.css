@@ -1,7 +1,6 @@
 .login-card {
     max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
+    margin: auto;
   }
   
   mat-form-field {
@@ -18,3 +17,11 @@
     gap: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
   }
   
+  .page
+  {
+    display: flex;
+    justify-content: center; /* จัดกึ่งกลางแนวนอน */
+    align-items: center;     /* จัดกึ่งกลางแนวตั้ง */
+    text-align: center;
+    height:calc(100vh - 80px); /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
+  }

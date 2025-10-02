@@ -70,13 +70,15 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
+
+    if (this.loginForm.valid) 
+    {
+
       const formData = this.loginForm.value;
       console.log('Login Data:', formData);
       console.log('email:', formData.email);
       console.log('password:', formData.password);
       // You can call an API here to handle login
-
       
       this.authService.login(formData.email, formData.password).subscribe({
         next: (response) => {

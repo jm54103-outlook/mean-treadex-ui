@@ -1,7 +1,12 @@
-.container
+
+.main
+{
+    width:100vw;
+    max-height:100vh;
+}
+.mat-drawer-container
 {
     min-width:100vw;
-    height: 85vh;
 }
 
 .toggle-menu
@@ -19,7 +24,7 @@
 mat-toolbar-row:hover {
     color: black; /* เปลี่ยนสีตัวอักษร */
     background-color:lightblue; /* เปลี่ยนสีพื้นหลัง */
-    border-radius: 5px; /* เพิ่มมุมโค้ง */
+    border-radius: 0px; /* เพิ่มมุมโค้ง */
     transform: scale(1.1); /* ขยายขนาดเล็กน้อย */
     transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
     cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
@@ -31,8 +36,9 @@ mat-toolbar-row:hover {
 
 .mat-drawer-content
 {
-    min-width: fit-content;
-    height: 100%;
+    min-width:fit-content;
+    height:calc(100vh - 80px); /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
+    min-height: max-content;
     background-color:gray;
     color: whitesmoke;
 }

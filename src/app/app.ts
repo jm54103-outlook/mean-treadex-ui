@@ -16,7 +16,7 @@ export class App {
 
   protected readonly title = signal('mean-tradex-ui');
   public isOpenedMenu=false;
-  public showToggleMenu=false;
+  public showToggleMenu=true;
 
   constructor(
     private router: Router
@@ -25,7 +25,6 @@ export class App {
   onClickToggleMenu(){
     this.isOpenedMenu=!this.isOpenedMenu;
   }
-
 
   onClickMenu(e:HTMLElement)
   {
