@@ -1,0 +1,38 @@
+.container
+{
+    min-width:100vw;
+    height: 85vh;
+}
+
+.toggle-menu
+{
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.header
+{
+  background-color: lightgray;
+  height: 65px;
+}
+
+/* เอฟเฟกต์เมื่อเมาส์ลากผ่าน (hover) */
+mat-toolbar-row:hover {
+    color: black; /* เปลี่ยนสีตัวอักษร */
+    background-color:lightblue; /* เปลี่ยนสีพื้นหลัง */
+    border-radius: 5px; /* เพิ่มมุมโค้ง */
+    transform: scale(1.1); /* ขยายขนาดเล็กน้อย */
+    transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.menu-icon {
+    padding: 0 14px;
+}
+
+.mat-drawer-content
+{
+    min-width: fit-content;
+    height: 100%;
+    background-color:gray;
+    color: whitesmoke;
+}

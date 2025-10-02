@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router'; 
 import { AuthenService } from '../../services/authen.service';
+import { App } from '../../app';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder
     ,private authService: AuthenService 
     ,private router: Router
+    ,private app:App
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +82,8 @@ export class LoginComponent implements OnInit {
         next: (response) => {
           console.log('Login successful!', response);
           // Redirect ไปยังหน้าหลักหลังจาก login สำเร็จ
-          this.router.navigate(['/home']);
+          this.router.navigate(['/about']);
+          this.app.showToggleMenu=true;
         },
         error: (err) => {
           let errorMessage = 'Login failed. Please try again.';
