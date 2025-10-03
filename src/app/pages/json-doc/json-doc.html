@@ -1,0 +1,39 @@
+
+<mat-card>
+<mat-card-title >
+    <span>JSON</span>  
+    <mat-card-subtitle>{{ObjectName}}</mat-card-subtitle>
+</mat-card-title>
+<mat-card-content> 
+    <form [formGroup]="jsonDocForm" >
+        <mat-form-field appearance="outline" style="width:300px;">
+            <mat-label>KeyName</mat-label>
+            <input matInput #keyName formControlName="keyName" type="text" required>          
+        </mat-form-field> 
+        &nbsp; 
+        <mat-form-field appearance="outline"  style="width:200px;">
+            <mat-label>KeyValue</mat-label>
+            <mat-select #keyValue formControlName="keyValue" >
+                    <mat-option value="String">String</mat-option>
+                    <mat-option value="Number">Number</mat-option>
+                    <mat-option value="Array">Array</mat-option>
+                    <mat-option value="Object">Object</mat-option>
+            </mat-select>
+        </mat-form-field>  
+        &nbsp; 
+        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()">add</button>
+        &nbsp; 
+        <button mat-raised-button #EditButton type="button" disabled="true" >edit</button>
+        &nbsp; 
+        <button mat-raised-button #RemoveButton type="button" disabled="true" >remove</button>
+        &nbsp; 
+    </form>
+</mat-card-content>
+</mat-card>
+<textarea style="width: 500px;height: 300px;">
+{{this.jsonObject}}
+</textarea>
+ 
+
+    
+

@@ -9,11 +9,12 @@ import { AboutComponent } from './pages/about/about';
 import { HelpComponent } from './pages/help/help';
 import { CategoryComponent } from './pages/category/category';
 import { SettingsComponent } from './pages/settings/settings';
-
+import { JsonDoc } from './pages/json-doc/json-doc';
 
 
 export const routes: Routes = [     
     { path: '', component: LoginComponent },
+    { path: 'json-doc', component: JsonDoc },
     { path: 'login', component: LoginComponent },
     { path: 'home', component: HomeComponent },
     { path: 'person', component: PersonComponent },        
