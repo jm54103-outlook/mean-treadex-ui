@@ -73,7 +73,8 @@ export class PersonComponent {
 
   }
 
-  build(){
+  build()
+  {
     this.personForm = this.fb.group({ 
       titleName:[null, [Validators.required]],   
       firstName:[null, [Validators.required]],
@@ -88,14 +89,29 @@ export class PersonComponent {
     this.refresh();
   }
 
-  refresh(){
+  refresh()
+  {
     console.log(`refresh()`);
+    
     this.bindModel(this.person);   
+  
+    const dialogAlertRef = this.dialog.open(DialogAlertComponent,
+    {
+        data: {title:"แจ้งเตือน", message:"เรียกข้อมูลสำเร็จ"},
+    })
+  
+     dialogAlertRef.afterClosed().subscribe(dismiss=>{      
+      console.log(`The dialog was closed. result:${dismiss}`);
+      if (dismiss !== undefined) {
+          console.log(`${dismiss}`);          
+      }
+    });  
+
   }
 
   bindModel(model:any)
   {
-    console.clear();    
+    //console.clear();    
     const formKeys = Object.keys(model);           
     formKeys.forEach(formKey => { 
         let modelKey:any;
@@ -117,9 +133,9 @@ export class PersonComponent {
     //const dialogAlertRef = this.dialog.open(DialogAlertComponent,{});
 
     const dialogConfirmRef = this.dialog.open(DialogConfirmComponent,
-      {
+    {
         data: {title:"ยืนยัน", message:"ต้องการบันทึกข้อมูล?"},
-      })
+    })
 
     dialogConfirmRef.afterClosed().subscribe(result=>{      
       console.log(`The dialog was closed. result:${result}`);

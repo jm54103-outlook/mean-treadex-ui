@@ -29,8 +29,8 @@ export class DialogAlertComponent {
   public message!:string;
 
   constructor(){
-    this.title="แจ้งเตือน";
-    this.message="ข้อความแจ้งเตือน!!!";
+    this.title=this.data.title;
+    this.message=this.data.message;
   }
   
   dismiss():void {

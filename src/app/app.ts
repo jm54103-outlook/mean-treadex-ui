@@ -1,13 +1,21 @@
-import { Component,NgModule,signal } from '@angular/core';
+import { Component,signal } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDrawerContainer, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterOutlet } from '@angular/router';
+import { appConfig } from './app.config';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MatDrawerContainer, MatSidenavModule, MatToolbarModule, MatIconModule, MatDividerModule],
+  imports: [RouterOutlet
+    , MatSlideToggleModule
+    , MatDrawerContainer
+    , MatSidenavModule
+    , MatToolbarModule
+    , MatIconModule
+    , MatDividerModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -15,14 +23,29 @@ import { Router, RouterOutlet } from '@angular/router';
 export class App {
 
   protected readonly title = signal('mean-tradex-ui');
+  public isCheckedLocalEN=($localize.locale=="th");
   public isOpenedMenu=false;
-  public showToggleMenu=true;
-
+  public showToggleMenu=true;  
+  public SelectedLocale="";
+  
   constructor(
     private router: Router
-  ) {}
+  ) 
+  {
+    let locale=$localize.locale;
+    this.SelectedLocale = (locale==undefined) ? "" : locale?.toString();    
 
-  onClickToggleMenu(){
+    let now = Date();
+    console.log(`Now is ${now.toString()}`);    
+    console.log(`SelectedLocale:${this.SelectedLocale}`);    
+
+
+  }
+
+ 
+
+  onClickToggleMenu()
+  {
     this.isOpenedMenu=!this.isOpenedMenu;
   }
 

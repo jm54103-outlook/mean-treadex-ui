@@ -5,9 +5,7 @@ import { routes } from './app.routes';
 import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core';
 
-
-
-const MY_DATE_FORMAT = {
+const APP_MAT_DATE_FORMAT = {
   parse: {
     dateInput: 'DD/MM/YYYY', // this is how your date will be parsed from Input
   },
@@ -22,9 +20,9 @@ const MY_DATE_FORMAT = {
 export const appConfig: ApplicationConfig = {
   providers: [
       provideNativeDateAdapter(),
-    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMAT},
-    { provide: MAT_DATE_LOCALE, useValue: 'th-TH', },
-    { provide: LOCALE_ID, useValue: 'th' },       
+    { provide: MAT_DATE_FORMATS, useValue: APP_MAT_DATE_FORMAT},
+    { provide: MAT_DATE_LOCALE, useValue: 'en-US', },
+    { provide: LOCALE_ID, useValue: 'en' },       
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),

@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 import { AuthenService } from '../../services/authen.service';
 import { App } from '../../app';
 
-
 @Component({
   selector: 'app-login',
   imports: [   
@@ -34,16 +33,20 @@ export class LoginComponent implements OnInit {
     ,private app:App
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });    
-
     this.loginForm.controls['email'].setValue(this.e);
   }
 
-  
+  build()
+  {
+    
+
+  }
+
   get email() {
     return this.loginForm.get('email');
   }

@@ -6,7 +6,8 @@
         <mat-icon>menu</mat-icon>
     </button>
       &nbsp;
-    <span>TradEx</span>
+    <span style="width:100%;">TradEx</span>
+    <mat-slide-toggle [checked]="isCheckedLocalEN">&nbsp;&nbsp;{{this.SelectedLocale.toUpperCase()}}&nbsp;&nbsp;</mat-slide-toggle>
   </mat-toolbar>
 </header>
 <mat-drawer-container class="mat-drawer-container">
