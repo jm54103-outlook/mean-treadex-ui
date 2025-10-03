@@ -11,6 +11,7 @@ import { CategoryComponent } from './pages/category/category';
 import { SettingsComponent } from './pages/settings/settings';
 
 
+
 export const routes: Routes = [     
     { path: '', component: LoginComponent },
     { path: 'login', component: LoginComponent },

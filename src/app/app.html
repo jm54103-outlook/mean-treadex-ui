@@ -15,37 +15,37 @@
       <mat-toolbar >
           <mat-toolbar-row #person class="menu-row" id="person" (click)="onClickMenu(person)">
               <mat-icon class="menu-icon" aria-hidden="false" aria-label="person" fontIcon="person"></mat-icon>
-              <span>บุคคล</span>
+              <span i18n="@@menu-person">Person</span>
           </mat-toolbar-row>
           <mat-toolbar-row #product class="menu-row" id="product" (click)="onClickMenu(product)">
               <mat-icon class="menu-icon" aria-hidden="false" aria-label="ผลิตภัณฑ์" fontIcon="inbox"></mat-icon>
-              <span>ผลิตภัณฑ์</span>
+              <span i18n="@@menu-product">Product</span>
           </mat-toolbar-row>
       </mat-toolbar>
       <mat-divider></mat-divider>
       <mat-toolbar>       
           <mat-toolbar-row #category class="menu-row" id="category" (click)="onClickMenu(category)">
-              <mat-icon class="menu-icon" aria-hidden="false" aria-label="หมวดหมู่" fontIcon="folder"></mat-icon>
-              <span>หมวดหมู่</span>
+            <mat-icon class="menu-icon" aria-hidden="false" aria-label="หมวดหมู่" fontIcon="folder"></mat-icon>
+            <span i18n="@@menu-category">Category</span>
           </mat-toolbar-row>
           <mat-toolbar-row #settings class="menu-row" id="settings" (click)="onClickMenu(settings)">
-              <mat-icon class="menu-icon" aria-hidden="false" aria-label="ตั้งค่า" fontIcon="settings"></mat-icon>
-              <span>ตั้งค่า</span>
+            <mat-icon class="menu-icon" aria-hidden="false" aria-label="ตั้งค่า" fontIcon="settings"></mat-icon>
+            <span i18n="@@menu-settings">Settings</span>
           </mat-toolbar-row>     
           <mat-toolbar-row #help class="menu-row" id="help" (click)="onClickMenu(help)">
             <mat-icon class="menu-icon" aria-hidden="false" aria-label="" fontIcon="help"></mat-icon>
-            <span>ช่วยเหลือ</span>
+            <span i18n="@@menu-help">Help</span>
           </mat-toolbar-row>     
           <mat-toolbar-row #about class="menu-row" id="about" (click)="onClickMenu(about)">
             <mat-icon class="menu-icon" aria-hidden="false" aria-label="เกี่ยวกับ" fontIcon="chat_info"></mat-icon>
-            <span>เกี่ยวกับ</span>
+            <span i18n="@@menu-about">About</span>
         </mat-toolbar-row>  
       </mat-toolbar>       
       <mat-divider></mat-divider> 
       <mat-toolbar>    
           <mat-toolbar-row #exit class="menu-row" id="exit" (click)="onClickMenu(exit)">
               <mat-icon class="menu-icon" aria-hidden="false" aria-label="Exit To App" fontIcon="exit_to_app" ></mat-icon>
-              <span>ออกจากระบบ</span>
+              <span i18n="@@menu-exit">Exit</span>
           </mat-toolbar-row>
       </mat-toolbar>       
       <mat-divider></mat-divider>

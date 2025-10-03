@@ -21,8 +21,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
       provideNativeDateAdapter(),
     { provide: MAT_DATE_FORMATS, useValue: APP_MAT_DATE_FORMAT},
-    { provide: MAT_DATE_LOCALE, useValue: 'en-US', },
-    { provide: LOCALE_ID, useValue: 'en' },       
+    { provide: MAT_DATE_LOCALE, useValue: 'th-TH', },
+    { provide: LOCALE_ID, useValue: 'th' },       
     provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),

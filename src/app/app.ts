@@ -39,7 +39,6 @@ export class App {
     console.log(`Now is ${now.toString()}`);    
     console.log(`SelectedLocale:${this.SelectedLocale}`);    
 
-
   }
 
  
