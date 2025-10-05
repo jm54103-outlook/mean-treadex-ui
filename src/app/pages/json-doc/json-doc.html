@@ -11,7 +11,7 @@
             <input matInput #keyName formControlName="keyName" type="text" required>          
         </mat-form-field> 
         &nbsp; 
-        <mat-form-field appearance="outline"  style="width:200px;">
+        <mat-form-field appearance="outline"  >
             <mat-label>KeyValue</mat-label>
             <mat-select #keyValue formControlName="keyValue" >
                     <mat-option value="String">String</mat-option>
@@ -21,19 +21,43 @@
             </mat-select>
         </mat-form-field>  
         &nbsp; 
-        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()">add</button>
+        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="!this.jsonDocForm.valid">add</button>
         &nbsp; 
-        <button mat-raised-button #EditButton type="button" disabled="true" >edit</button>
+        <button mat-raised-button #EditButton type="button" disabled="true">edit</button>
         &nbsp; 
-        <button mat-raised-button #RemoveButton type="button" disabled="true" >remove</button>
+        <button mat-raised-button #RemoveButton type="button" disabled="true">remove</button>
         &nbsp; 
     </form>
 </mat-card-content>
 </mat-card>
-<textarea style="width: 500px;height: 300px;">
-{{this.jsonObject}}
+<textarea style="width: 500px;height: 300px;" readonly>
+{{this.jsonObject | json}}
 </textarea>
- 
-
+ <h2>TABS</h2>
+ <br>1.TABLE VIEW
+ <br>1.1 edit
+ <br>1.2 remove
+ <br>2.Json Object VIEW
+ <p>&nbsp;</p>
     
-
+ <table mat-table [dataSource]="data" class="mat-elevation-z8">
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+  
+    <!-- key Column -->
+    <ng-container matColumnDef="key">
+      <th mat-header-cell *matHeaderCellDef> key</th>
+      <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
+    </ng-container>
+  
+    <!-- value Column -->
+    <ng-container matColumnDef="value">
+      <th mat-header-cell *matHeaderCellDef> value </th>
+      <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  

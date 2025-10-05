@@ -2,3 +2,8 @@ button
 {
 width: 100px;
 }
+mat-card
+{
+    background-color: white;
+    color: blue;
+}
