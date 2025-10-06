@@ -5,7 +5,7 @@
     <mat-card-subtitle>{{ObjectName}}</mat-card-subtitle>
 </mat-card-title>
 <mat-card-content> 
-    <form [formGroup]="jsonDocForm" >
+    <form [formGroup]="form" >
         <mat-form-field appearance="outline" style="width:300px;">
             <mat-label>KeyName</mat-label>
             <input matInput #keyName formControlName="keyName" type="text" required>          
@@ -21,11 +21,11 @@
             </mat-select>
         </mat-form-field>  
         &nbsp; 
-        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="!this.jsonDocForm.valid">add</button>
+        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="disabledAdd || !this.form.valid">add</button>
         &nbsp; 
-        <button mat-raised-button #EditButton type="button" disabled="true">edit</button>
+        <button mat-raised-button #EditButton type="button" (click)="onClickEdit()" [disabled]="disabledEdit">edit</button>
         &nbsp; 
-        <button mat-raised-button #RemoveButton type="button" disabled="true">remove</button>
+        <button mat-raised-button #RemoveButton type="button" (click)="onClickRemove()" [disabled]="disabledRemove">remove</button>
         &nbsp; 
     </form>
 </mat-card-content>
@@ -34,15 +34,23 @@
 {{this.jsonObject | json}}
 </textarea>
  <h2>TABS</h2>
- <br>1.TABLE VIEW
- <br>1.1 edit
- <br>1.2 remove
+ <br>1.TABLE VIEW (bug edit new key)
  <br>2.Json Object VIEW
  <p>&nbsp;</p>
     
  <table mat-table [dataSource]="data" class="mat-elevation-z8">
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- key Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>
+       <td mat-cell *matCellDef="let kv">
+        <button matMiniFab (click)="onClickSelectedRow(kv)" title="{{kv.key}}" style="width:35px;">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </td>
+    </ng-container>
   
     <!-- key Column -->
     <ng-container matColumnDef="key">
