@@ -12,14 +12,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { DialogAlertComponent } from '../../components/dialogs/dialog-alert.component/dialog-alert.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableModule} from '@angular/material/table';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 export interface KeyValue {
   id: number;
   key: string;
   value: string;
 }
-
-
 
 @Component({
   selector: 'app-json-doc',
@@ -34,6 +33,7 @@ export interface KeyValue {
     MatButtonModule,  
     MatRadioModule,
     MatDatepickerModule,
+    MatGridListModule,
     ReactiveFormsModule // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***
   ],
   templateUrl: './json-doc.html',
@@ -45,9 +45,7 @@ export class JsonDoc {
   disabledEdit=true;
   disabledRemove=true;
 
-  data: KeyValue[] = [
-  
-  ];
+  dataTable: KeyValue[]=[];
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
 
@@ -65,7 +63,6 @@ export class JsonDoc {
 
   ) 
   { 
-  
   } 
   
   ngOnInit(): void {   
@@ -80,15 +77,13 @@ export class JsonDoc {
     });
   }
 
-
-
   setKeyValue(i:number,k:string,v:string){
     
     let e:KeyValue={id:i, key:k, value:v};
-    let row=this.data.at(i);
+    let row=this.dataTable.at(i-1);
     if(row==null)
     {    
-      this.data.push(e);
+      this.dataTable.push(e);
     }
     else
     {
@@ -98,13 +93,14 @@ export class JsonDoc {
     
     this.table.renderRows();
     this.getJsonObjectFromArray();
+    this.form.reset();
 
   }
 
   getJsonObjectFromArray()
   {
     this.jsonText=`{ `;
-    this.data.forEach(e=>{
+    this.dataTable.forEach(e=>{
       let value=e.value;
       let row="";
       switch(value)
@@ -122,7 +118,7 @@ export class JsonDoc {
           row=`"${e.key}":{ }`;
           break;
       }
-      this.jsonText+= (this.data[0].key==e.key) ? row : `,${row}`;
+      this.jsonText+= (this.dataTable[0].key==e.key) ? row : `,${row}`;
 
     });
     this.jsonText+=` }`;
@@ -131,6 +127,7 @@ export class JsonDoc {
     this.jsonObject=JSON.parse(this.jsonText);
     this.jsonText=JSON.stringify(this.jsonObject,null,2)
     console.log(this.jsonText);  
+
   }
 
   onClickAdd()
@@ -138,13 +135,18 @@ export class JsonDoc {
       const keyName=this.form.controls['keyName'].value;
       const keyValue=this.form.controls['keyValue'].value;
 
-      let found=this.data.filter(e=>e.key==keyName).length>0;
+      let found=this.dataTable.filter(e=>e.key==keyName).length>0;
       console.log(`found:${found}`);
+      let max=0;
       if(!found)
       {
-          let id=this.data.length;
-          this.setKeyValue(id,keyName,keyValue);
-          this.getJsonObjectFromArray();          
+        this.dataTable.forEach(e=>{
+          max=(e.id>max) ? e.id : max;
+        });
+        let id=max+1;
+        console.log(id);
+        this.setKeyValue(id,keyName,keyValue);
+        this.getJsonObjectFromArray();          
       }
       else
       {
@@ -159,38 +161,50 @@ export class JsonDoc {
   }
 
 
-  selectedIndex=0;
+  selected_id=0;
   onClickEdit()
   {
-    console.log(`onClickEdit()`)
-  
+
+    let id=this.selected_id;
+    console.log(`onClickEdit(${id})`);
+
     let key = this.form.controls['keyName'].value;
     let value =  this.form.controls['keyValue'].value;
+   
  
-    this.setKeyValue(this.selectedIndex, key, value);
+    this.setKeyValue(id, key, value);
+
+    this.disabledAdd=false;
+    this.disabledEdit=true;
+    this.disabledRemove=true;
    
   }
 
   onClickRemove()
   {
     this.form.reset();
-    let Index=this.data.findIndex(e=>e.id==this.selectedIndex);
+
+    let Index=this.dataTable.findIndex(e=>e.id==this.selected_id);
     console.log(`this.data.findIndex:${Index}`);   
-    this.data=this.data.filter(e=>e.id!=this.selectedIndex);
-    console.log(`this.data.length:${this.data.length}`);
+    this.dataTable=this.dataTable.filter(e=>e.id!=this.selected_id);
+    console.log(`this.data.length:${this.dataTable.length}`);
     this.getJsonObjectFromArray();     
     this.table.renderRows();
+
+    this.disabledAdd=false;
+    this.disabledEdit=true;
+    this.disabledRemove=true;
     
   }
 
   onClickSelectedRow(kv:any)
   {
-    console.log(`onClickSelectedRow(${kv.id})`)
-
+    console.log(`onClickSelectedRow(${kv.id})`);
+    this.selected_id=kv.id;
 
     this.form.reset();
 
-    this.selectedIndex=kv.id;
+   
     this.form.controls['keyName'].setValue(kv.key);
     this.form.controls['keyValue'].setValue(kv.value);
     

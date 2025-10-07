@@ -7,3 +7,40 @@ mat-card
     background-color: white;
     color: blue;
 }
+
+textarea
+{
+    width:95%;
+    height:calc(100% - 27px);
+   
+}
+
+.table-container {
+    height: 300px;
+    width:100%;
+    overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
+    display: block;
+    background-color: lightgrey;
+  }
+  
+  .mat-header-row{
+    position: sticky;
+    top: 0; /* ทำให้ header คงที่ตอนเลื่อน */
+    z-index: 1; /* ให้ header อยู่ด้านบนสุด */
+    background-color: lightblue; /* เปลี่ยนพื้นหลังเพื่อให้ header ดูเด่น */
+  }
+  
+  mat-header-cell {
+    padding: 8px 16px;
+  }
+  
+  .container {
+    display: flex;
+    width: 100%; /* กำหนดความกว้างของ container ให้เต็มหน้าจอ */
+  }
+  
+  .column {
+    width: 50%; /* กำหนดความกว้างของแต่ละคอลัมน์ให้เป็น 50% */
+    padding: 10px; /* ปรับระยะห่างภายใน */
+    box-sizing: border-box; /* คำนวณ padding ในขนาดของ element */
+  }
