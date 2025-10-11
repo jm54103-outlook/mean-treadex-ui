@@ -13,33 +13,67 @@ import { DialogAlertComponent } from '../../components/dialogs/dialog-alert.comp
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableModule} from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { Guid } from 'guid-typescript';
+import { NgFor } from '@angular/common'; // ✅ ต้อง import NgFor ด้วย
+
 
 export interface KeyValue {
   id: number;
   key: string;
   value: string;
 }
+interface TreeNode {
+  id?: Guid;
+  name: string;
+  children?: TreeNode[];
+}
+
+let TreeNodes : TreeNode[] = [
+  {
+    name: 'JsonObjects',
+    children: [
+      {id:Guid.create(), name: 'JsonObject1'},
+      {id:Guid.create(), name: 'JsonObject2'},
+      {id:Guid.create(), name: 'JsonObject3'},
+
+      ],
+  }  
+];
+
 
 @Component({
   selector: 'app-json-doc',
-  imports: [     
-    JsonPipe,      
+  imports: [
+    JsonPipe,
+    MatSidenavModule,
+    MatTabsModule,
+    MatProgressBarModule,
+    MatTreeModule,
     MatIconModule,
     MatTableModule,
     MatCardModule,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
-    MatButtonModule,  
+    MatButtonModule,
     MatRadioModule,
     MatDatepickerModule,
     MatGridListModule,
     ReactiveFormsModule // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***
-  ],
+    ,NgFor
+],
   templateUrl: './json-doc.html',
   styleUrl: './json-doc.css'
 })
 export class JsonDoc {
+
+  dataSourceTreeNode = TreeNodes;
+  childrenAccessor = (node: TreeNode) => node.children ?? [];
+  hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
   disabledAdd=false;
   disabledEdit=true;
@@ -48,6 +82,7 @@ export class JsonDoc {
   dataTable: KeyValue[]=[];
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
+  @ViewChild(MatTree) tree!: MatTree<TreeNode>;
 
   readonly dialog = inject(MatDialog);
   displayedColumns: string[] = ['id', 'key', 'value'];
@@ -55,20 +90,19 @@ export class JsonDoc {
   form!:FormGroup; 
   jsonText="";
   jsonObject={};
+  jsonSelectedTreeNode!:TreeNode;
  
-  ObjectName="Document" ;
-
   constructor(
     private fb: FormBuilder ,   
 
   ) 
-  { 
+  {     
   } 
   
   ngOnInit(): void {   
     this.build();
   }
-
+  
   build()
   {
     this.form=this.fb.group({
@@ -76,6 +110,8 @@ export class JsonDoc {
       keyValue:['', [Validators.required]],   
     });
   }
+
+
 
   setKeyValue(i:number,k:string,v:string){
     
@@ -128,6 +164,22 @@ export class JsonDoc {
     this.jsonText=JSON.stringify(this.jsonObject,null,2)
     console.log(this.jsonText);  
 
+  }
+
+  selectedIndexTab=1;
+
+  onClickJsonTreeNode(node:TreeNode){
+    if(node.id==null)
+    {
+       console.log(`onClickJsonTreeNode():${node.id}}`);
+       this.selectedIndexTab = 0;
+    }
+    else
+    {
+      console.log(`onClickJsonTreeNode():${node.id}}`);
+      this.selectedIndexTab = 1;
+      this.jsonSelectedTreeNode=node;
+    }    
   }
 
   onClickAdd()
