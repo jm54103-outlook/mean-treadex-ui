@@ -1,18 +1,16 @@
 .person-card {
     width: 100%;
-    min-width: 600px;
+    min-width: fit-content;
     max-width: 100%;
-    margin: 50px auto;
-    padding: 20px;
 }
 
 mat-card-title {
-    background-color: gray;
-    color: black;
-    padding: 5px;
+    background-color: blue;
+    color: white;
+    padding: 15px;
 }
 
 mat-card-footer{
     border-top: gray solid;  
-    padding-top: 15px;
+    padding: 15px;
 }

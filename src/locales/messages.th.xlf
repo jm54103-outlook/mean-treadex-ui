@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="th" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="menu-person" datatype="html">
+        <source>บุคคล</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">18,19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-product" datatype="html">
+        <source>ผลิตภัณฑ์</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">22,23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-category" datatype="html">
+        <source>หมวดหมู่</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">29,30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-settings" datatype="html">
+        <source>ตั้งค่า</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">33,34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-help" datatype="html">
+        <source>ช่วยเหลือ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">37,38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-about" datatype="html">
+        <source>เกี่ยวกับ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">41,42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="menu-exit" datatype="html">
+        <source>ออกจากระบบ</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.html</context>
+          <context context-type="linenumber">48,49</context>
+        </context-group>
+      </trans-unit>     
+      <trans-unit id="form-button-save" datatype="html">
+        <source>บันทึก</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/person/person.html</context>
+          <context context-type="linenumber">80,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="form-button-cancel" datatype="html">
+        <source>ยกเลิก</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/person/person.html</context>
+          <context context-type="linenumber">82,84</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="form-button-refresh" datatype="html">
+        <source>เรียกข้อมูล</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pages/person/person.html</context>
+          <context context-type="linenumber">84,85</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

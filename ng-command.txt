@@ -1,0 +1,6 @@
+ng serve 
+ng build
+ng g c pages/webpage1
+ng g c components/groups/component1.component
+ng g s services/service1.service
+ng extract-i18n --output-path src/locales

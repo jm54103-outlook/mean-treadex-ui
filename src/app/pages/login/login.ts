@@ -5,9 +5,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; // Import Router
+import { Router } from '@angular/router'; 
 import { AuthenService } from '../../services/authen.service';
-
+import { App } from '../../app';
 
 @Component({
   selector: 'app-login',
@@ -30,18 +30,23 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder
     ,private authService: AuthenService 
     ,private router: Router
+    ,private app:App
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });    
-
     this.loginForm.controls['email'].setValue(this.e);
   }
 
-  
+  build()
+  {
+    
+
+  }
+
   get email() {
     return this.loginForm.get('email');
   }
@@ -68,19 +73,22 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
+
+    if (this.loginForm.valid) 
+    {
+
       const formData = this.loginForm.value;
       console.log('Login Data:', formData);
       console.log('email:', formData.email);
       console.log('password:', formData.password);
       // You can call an API here to handle login
-
       
       this.authService.login(formData.email, formData.password).subscribe({
         next: (response) => {
           console.log('Login successful!', response);
           // Redirect ไปยังหน้าหลักหลังจาก login สำเร็จ
-          this.router.navigate(['/home']);
+          this.router.navigate(['/about']);
+          this.app.showToggleMenu=true;
         },
         error: (err) => {
           let errorMessage = 'Login failed. Please try again.';

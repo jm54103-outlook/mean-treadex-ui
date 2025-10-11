@@ -1,0 +1,81 @@
+
+<mat-card>
+<mat-card-title >
+    <span>&nbsp;&nbsp;JSON</span>  
+    <mat-card-subtitle>     
+      <label>&nbsp;&nbsp;&nbsp;{{ObjectName}}</label>    
+      <br>  
+    </mat-card-subtitle>
+</mat-card-title>
+<mat-card-content> 
+    <form [formGroup]="form" >
+        <mat-form-field appearance="outline" style="width:300px;">
+            <mat-label>KeyName</mat-label>
+            <input matInput #keyName formControlName="keyName" type="text" required>          
+        </mat-form-field> 
+        &nbsp; 
+        <mat-form-field appearance="outline"  >
+            <mat-label>KeyValue</mat-label>
+            <mat-select #keyValue formControlName="keyValue" >
+                    <mat-option value="String">String</mat-option>
+                    <mat-option value="Number">Number</mat-option>
+                    <mat-option value="Array">Array</mat-option>
+                    <mat-option value="Object">Object</mat-option>
+            </mat-select>
+        </mat-form-field>  
+        &nbsp; 
+        <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="disabledAdd || !this.form.valid">add</button>
+        &nbsp; 
+        <button mat-raised-button #EditButton type="button" (click)="onClickEdit()" [disabled]="disabledEdit || !this.form.valid">edit</button>
+        &nbsp; 
+        <button mat-raised-button #RemoveButton type="button" (click)="onClickRemove()" [disabled]="disabledRemove">remove</button>
+        &nbsp; 
+    </form>
+</mat-card-content>
+</mat-card>
+<div class="container">
+  <div class="column">
+    <!-- เนื้อหาของคอลัมน์แรก -->
+    <label style="font-weight: bold;">Field List</label>
+    <div class="table-container">     
+      <table mat-table [dataSource]="dataTable"  >
+      <!--- Note that these columns can be defined in any order.px
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- key Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>
+        <td mat-cell *matCellDef="let kv">
+          <button matIconButton (click)="onClickSelectedRow(kv)" title="{{kv.id}}" style="width:45px;">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- key Column -->
+      <ng-container matColumnDef="key">
+        <th mat-header-cell *matHeaderCellDef> key</th>
+        <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
+      </ng-container>
+
+      <!-- value Column -->
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef> value </th>
+        <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+      </table>
+    </div> 
+  </div>
+  <div class="column">
+    <!-- เนื้อหาของคอลัมน์ที่สอง -->
+    <label style="font-weight: bold;">Json Object</label>
+    <textarea readonly>{{this.jsonObject | json}}</textarea>
+  </div>
+</div>
+
+  
+  

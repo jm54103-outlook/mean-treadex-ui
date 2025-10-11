@@ -1,16 +1,6 @@
-
-<h1 i18n="@@welcomeMessage">Welcome</h1>
-<h1 i18n="@@homeTitle">Welcome to My Angular App!</h1>
-<p i18n="@@description">This is an Angular application demonstrating i18n support.</p>
-
-<li>onBlur()</li>
-<li>AlertDialogBox</li>
-<li>ConfirmAlertDialogBox</li>
-<li>getLocale Setting</li>
-
 <mat-card class="person-card">
 <mat-card-title >
-    PERSON    
+    <span></span>  
 </mat-card-title>
 <mat-card-subtitle>บุคคลธรรมดา</mat-card-subtitle>
 <mat-card-content>    
@@ -85,14 +75,13 @@
         </table>  
         </div>      
     </form>
-    <p>
-        &nbsp; &nbsp;
-    </p>
 </mat-card-content>
-<mat-card-footer style="align-items:center;">
-    <button mat-raised-button #submitButton color="primary" type="submit" (click)="onSubmit()">submit</button>
+<mat-card-footer>
+    <button mat-raised-button #SaveButton type="button" (click)="onSubmit()" i18n="@@form-button-save">Save</button>
     &nbsp;&nbsp;
-    <button mat-raised-button #cancelButton color="primary" type="reset" (click)="onCancel()">Cancel</button>   
+    <button mat-raised-button #CancelButton type="reset" (click)="onCancel()" i18n="@@form-button-cancel">Cancel</button>   
+    &nbsp;&nbsp;
+    <button mat-raised-button #RefreshButton type="button" (click)="refresh()" i18n="@@form-button-refresh">Refresh</button>   
 </mat-card-footer>     
 </mat-card>
    

@@ -1,0 +1,45 @@
+<header class="header">
+    <mat-toolbar>
+        <button matMiniFab aria-label="Example icon button with a menu icon" class="toggle-menu" (click)=onClickToggleMenu()>
+            <mat-icon>menu</mat-icon>
+        </button>
+        &nbsp;
+        <span>TradEx</span>
+    </mat-toolbar>
+</header>
+<mat-drawer-container class="container">
+    <mat-drawer mode="side" [opened]="isOpenedMenu">        
+        <mat-toolbar >
+            <mat-toolbar-row #person class="menu-row" id="person" (click)="onClickMenu(person)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="person" fontIcon="person"></mat-icon>
+                <span>บุคคล</span>
+            </mat-toolbar-row>
+            <mat-toolbar-row #product class="menu-row" id="product" (click)="onClickMenu(product)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="ผลิตภัณฑ์" fontIcon="inbox"></mat-icon>
+                <span>ผลิตภัณฑ์</span>
+            </mat-toolbar-row>
+        </mat-toolbar>
+        <mat-divider></mat-divider>
+        <mat-toolbar>
+            <mat-toolbar-row #category class="menu-row" id="category" (click)="onClickMenu(category)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="หมวดหมู่" fontIcon="folder"></mat-icon>
+                <span>หมวดหมู่</span>
+            </mat-toolbar-row>
+            <mat-toolbar-row #settings class="menu-row" id="settings" (click)="onClickMenu(settings)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="ตั้งค่า" fontIcon="settings"></mat-icon>
+                <span>ตั้งค่า</span>
+            </mat-toolbar-row>       
+        </mat-toolbar>       
+        <mat-divider></mat-divider> 
+        <mat-toolbar>    
+            <mat-toolbar-row #exit class="menu-row" id="exit" (click)="onClickMenu(exit)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="Exit To App" fontIcon="exit_to_app" ></mat-icon>
+                <span>ออกจากระบบ</span>
+            </mat-toolbar-row>
+        </mat-toolbar>       
+        <mat-divider></mat-divider>
+    </mat-drawer>
+    <mat-drawer-content class="mat-drawer-content">
+        Main content
+    </mat-drawer-content>
+</mat-drawer-container>

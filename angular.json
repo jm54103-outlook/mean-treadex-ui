@@ -7,7 +7,7 @@
       "projectType": "application",
       "i18n": {
         "sourceLocale": "en-US",
-        "locales": {"th":"src/locale/messages.th.xlf"}       
+        "locales": {"th":"src/locales/messages.th.xlf"}       
       },
       "schematics": {},
       "root": "",
