@@ -1,7 +1,6 @@
-
 <div class="main">
 <header class="header">
-  <mat-toolbar>
+  <mat-toolbar class="app-toolbar">
     <button matMiniFab  class="toggle-menu"  [style.visibility]="showToggleMenu ? 'visible' : 'hidden'"  (click)=onClickToggleMenu()>
         <mat-icon>menu</mat-icon>
     </button>
@@ -10,8 +9,8 @@
     <mat-slide-toggle [checked]="isCheckedLocalEN">&nbsp;&nbsp;{{this.SelectedLocale.toUpperCase()}}&nbsp;&nbsp;</mat-slide-toggle>
   </mat-toolbar>
 </header>
-<mat-drawer-container class="mat-drawer-container">
-  <mat-drawer mode="side" [opened]="isOpenedMenu">        
+<mat-drawer-container class="app-drawer-content">
+  <mat-drawer mode="side" [opened]="isOpenedMenu" class="app-drawer">        
       <mat-toolbar >
           <mat-toolbar-row #person class="menu-row" id="person" (click)="onClickMenu(person)">
               <mat-icon class="menu-icon" aria-hidden="false" aria-label="person" fontIcon="person"></mat-icon>
@@ -58,10 +57,17 @@
       </mat-toolbar>       
       <mat-divider></mat-divider>
   </mat-drawer>
-  <mat-drawer-content class="mat-drawer-content">
-    <div style="background-color:brown;margin:5px;">
-      <router-outlet ></router-outlet>  
+  <mat-drawer-content>
+    <div class="outlet">
+      <router-outlet></router-outlet>  
+      <!--end of router-outlet-->
     </div>
+    <!--end of mat-drawer-content-->
   </mat-drawer-content>
+  <!--end of mat-drawer-container-->
 </mat-drawer-container>
+<!--end of div app.html-->
+<footer class="footer">
+  <label>footer_text</label>  
+</footer>
 </div>

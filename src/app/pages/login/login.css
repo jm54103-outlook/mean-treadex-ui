@@ -23,5 +23,5 @@
     justify-content: center; /* จัดกึ่งกลางแนวนอน */
     align-items: center;     /* จัดกึ่งกลางแนวตั้ง */
     text-align: center;
-    height:calc(100vh - 80px); /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
+    height:100%; /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
   }

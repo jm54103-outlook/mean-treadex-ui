@@ -1,6 +1,6 @@
-<mat-drawer-container class="drawer-container">
-  <mat-drawer mode="side" opened="true">Drawer content
-    <mat-tree #tree [dataSource]="dataSourceTreeNode" [childrenAccessor]="childrenAccessor">
+<mat-drawer-container class="page" >
+  <mat-drawer mode="side" opened="true">
+    <mat-tree #tree class="tree-panel" [dataSource]="dataSourceTreeNode" [childrenAccessor]="childrenAccessor">
       <!-- This is the tree node template for expandable nodes -->
       <mat-tree-node *matTreeNodeDef="let node;when: hasChild" 
        matTreeNodePadding matTreeNodeToggle 
@@ -26,9 +26,9 @@
       </mat-tree-node>      
     </mat-tree>
   </mat-drawer>
-  <mat-drawer-content>Main content
+  <mat-drawer-content class="drawer-content">       
     <mat-tab-group #tabs animationDuration="500ms" (selectedIndexChange)="onChangeSelectedIndexTab()">
-      <mat-tab label="Object"  [disabled]="tree.isExpanded(dataSourceTreeNode[0])" >
+      <mat-tab label="Object" class="mat-tab-label"  [disabled]="tree.isExpanded(dataSourceTreeNode[0])">
           <h3>Json Object List</h3>                               
               <li *ngFor="let node of this.dataSourceTreeNode"> 
                 {{ node?.name || 'No ID Available' }}
@@ -37,100 +37,105 @@
                 </pre>               
               </li>                                          
       </mat-tab>
-      <mat-tab label="Attributes"  [disabled]="!tree.isExpanded(dataSourceTreeNode[0]) || hasSelectedJsonSelectedTreeNode()">
+      <mat-tab label="Attributes"  [disabled]="!tree.isExpanded(dataSourceTreeNode[0]) || hasSelectedJsonSelectedTreeNode()" >   
+        <div class="div-tab2">  
+          <p>&nbsp;</p>    
           <h3>Json Object Attributes</h3>    
-        <mat-card>
-  <mat-card-title >
-      <span>&nbsp;&nbsp;JSON</span>  
-      <mat-card-subtitle>     
-        <label>&nbsp;&nbsp;&nbsp;{{(jsonSelectedTreeNode==undefined) ? "Not Avaliable!!!" : jsonSelectedTreeNode.name}}</label>    
-        <br>  
-      </mat-card-subtitle>
-  </mat-card-title>
-  <mat-card-content> 
-      <form [formGroup]="form" >
-          <mat-form-field appearance="outline" style="width:300px;">
-              <mat-label>KeyName</mat-label>
-              <input matInput #keyName formControlName="keyName" type="text" required>          
-          </mat-form-field> 
-          &nbsp; 
-          <mat-form-field appearance="outline"  >
-              <mat-label>KeyValue</mat-label>
-              <mat-select #keyValue formControlName="keyValue" >
-                      <mat-option value="String">String</mat-option>
-                      <mat-option value="Number">Number</mat-option>
-                      <mat-option value="Array">Array</mat-option>
-                      <mat-option value="Object">Object</mat-option>
-              </mat-select>
-          </mat-form-field>  
-          &nbsp; 
-          <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="disabledAdd || !this.form.valid">add</button>
-          &nbsp; 
-          <button mat-raised-button #EditButton type="button" (click)="onClickEdit()" [disabled]="disabledEdit || !this.form.valid">edit</button>
-          &nbsp; 
-          <button mat-raised-button #RemoveButton type="button" (click)="onClickRemove()" [disabled]="disabledRemove">remove</button>
-          &nbsp; 
-      </form>
-  </mat-card-content>
-  </mat-card>
-  <div class="container">
-    <div class="column">
-      <!-- เนื้อหาของคอลัมน์แรก -->
-      <label style="font-weight: bold;">Field List</label>
-      <div class="table-container">     
-        <table mat-table [dataSource]="dataSourceTable"  >
-        <!--- Note that these columns can be defined in any order.px
-              The actual rendered columns are set as a property on the row definition" -->
+          <mat-card class="mat-card">
+          <mat-card-title >
+              <span>&nbsp;&nbsp;JSON</span>  
+              <mat-card-subtitle>     
+                <label>&nbsp;&nbsp;&nbsp;{{(jsonSelectedTreeNode==undefined) ? "Not Avaliable!!!" : jsonSelectedTreeNode.name}}</label>    
+                <br>  
+              </mat-card-subtitle>
+          </mat-card-title>
+          <mat-card-content> 
+              <form [formGroup]="form" >
+                  <mat-form-field appearance="outline" style="width:300px;">
+                      <mat-label>KeyName</mat-label>
+                      <input matInput #keyName formControlName="keyName" type="text" required>          
+                  </mat-form-field> 
+                  &nbsp; 
+                  <mat-form-field appearance="outline"  >
+                      <mat-label>KeyValue</mat-label>
+                      <mat-select #keyValue formControlName="keyValue" >
+                              <mat-option value="String">String</mat-option>
+                              <mat-option value="Number">Number</mat-option>
+                              <mat-option value="Array">Array</mat-option>
+                              <mat-option value="Object">Object</mat-option>
+                      </mat-select>
+                  </mat-form-field>  
+                  &nbsp; 
+                  <button mat-raised-button #AddButton type="button" (click)="onClickAdd()" [disabled]="disabledAdd || !this.form.valid">add</button>
+                  &nbsp; 
+                  <button mat-raised-button #EditButton type="button" (click)="onClickEdit()" [disabled]="disabledEdit || !this.form.valid">edit</button>
+                  &nbsp; 
+                  <button mat-raised-button #RemoveButton type="button" (click)="onClickRemove()" [disabled]="disabledRemove">remove</button>
+                  &nbsp; 
+              </form>
+          </mat-card-content>
+          </mat-card>
+          <br>
+          <div class="view-container">
+            <div class="half-column-container">
+              <!-- เนื้อหาของคอลัมน์แรก -->
+              <label style="font-weight: bold;">Field List</label>              
+              <div class="table-container">     
+                <table mat-table [dataSource]="dataSourceTable"  >
+                <!--- Note that these columns can be defined in any order.px
+                      The actual rendered columns are set as a property on the row definition" -->
 
-         <!-- key Column -->
-         <ng-container matColumnDef="treeid">
-          <th mat-header-cell *matHeaderCellDef style="width:50px;">obj</th>        
-          <td mat-cell *matCellDef="let kv">                
-            <span class="material-symbols-outlined" title="{{kv.treeid}}" >
-              file_json
-             </span>  
-          </td>
-        </ng-container>
-  
-        <!-- key Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>        
-          <td mat-cell *matCellDef="let kv">
-            <button matIconButton (click)="onClickSelectedRow(kv)" title="{{kv.id}}" style="width:45px;">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-  
-        <!-- key Column -->
-        <ng-container matColumnDef="key">
-          <th mat-header-cell *matHeaderCellDef> key</th>
-          <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
-        </ng-container>
-  
-        <!-- value Column -->
-        <ng-container matColumnDef="value">
-          <th mat-header-cell *matHeaderCellDef> value </th>
-          <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
-      
-        </table>
-      </div> 
-    </div>
-    <div class="column">
-      <!-- เนื้อหาของคอลัมน์ที่สอง -->
-      <label style="font-weight: bold;">Json Object</label>
-      <textarea readonly>{{this.jsonObject | json}}</textarea>
-    </div>
-        </div>  
+                <!-- key Column -->
+                <ng-container matColumnDef="treeid">
+                  <th mat-header-cell *matHeaderCellDef style="width:50px;">obj</th>        
+                  <td mat-cell *matCellDef="let kv">                
+                    <span class="material-symbols-outlined" title="{{kv.treeid}}" >
+                      file_json
+                    </span>  
+                  </td>
+                </ng-container>
+          
+                <!-- key Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>        
+                  <td mat-cell *matCellDef="let kv">
+                    <button matIconButton (click)="onClickSelectedRow(kv)" title="{{kv.id}}" style="width:45px;">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+          
+                <!-- key Column -->
+                <ng-container matColumnDef="key">
+                  <th mat-header-cell *matHeaderCellDef> key</th>
+                  <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
+                </ng-container>
+          
+                <!-- value Column -->
+                <ng-container matColumnDef="value">
+                  <th mat-header-cell *matHeaderCellDef> value </th>
+                  <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
+                </ng-container>
+          
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+              
+                </table>
+              </div> 
+            </div>
+            <div class="half-column-container" >
+              <!-- เนื้อหาของคอลัมน์ที่สอง -->             
+                <label style="font-weight: bold;">Json Object</label>
+                <br>
+                <textarea readonly class="json-object-textarea" >{{this.jsonObject | json}}</textarea>                          
+            </div>
+          </div>   
+        </div>      
       </mat-tab>
       <mat-tab label="Form"> 
          <h3>Design</h3> 
          <h3>View</h3> 
       </mat-tab>
-    </mat-tab-group>
+    </mat-tab-group>    
   </mat-drawer-content>
 </mat-drawer-container>

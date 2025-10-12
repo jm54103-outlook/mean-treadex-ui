@@ -1,60 +1,109 @@
-.mat-tree-node:hover
-{
-    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
-    color: black; /* เปลี่ยนสีตัวอักษร */
-    font-weight: bold;
-    background-color:lightgoldenrodyellow; /* เปลี่ยนสีพื้นหลัง */   
-    transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
-    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+:root {
+  /* กำหนดตัวแปร */
+  --height1 : 64px;   
 }
 
-.mat-drawer-content{
-  width:100%; 
+.page
+{
+  height: 100%;
+}
+
+mat-header-cell {
+  padding: 8px 16px;
+}
+
+
+.tree-panel
+{
+  height: 100%;                /* ความสูงเต็มหน้าจอ */
+  width: 100%;                 /* กว้างเต็ม */
+  border-radius: 25px;         /* มุมโค้งมน */
+  background-color: gray;   /* สีพื้นหลัง (เปลี่ยนได้) */
+  padding: 20px;               /* ระยะห่างภายใน */
+  box-sizing: border-box;      /* นับ padding ในขนาดรวม */
+}
+
+.mat-tree-node:hover
+{
+  cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+  color: black; /* เปลี่ยนสีตัวอักษร */
+  font-weight: bold;
+  background-color:lightgoldenrodyellow; /* เปลี่ยนสีพื้นหลัง */   
+  transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
+  cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.drawer-content
+{
+  height: inherit;                         
+  background-color:lightblue;
+  border-radius: 25px;         /* มุมโค้งมน */
+  padding: 15px;               /* ระยะห่างภายใน */
+  box-sizing: border-box;      /* นับ padding ในขนาดรวม */ 
+}
+
+.div-tab2
+{
+  background-color: bisque;     
+  justify-items: center;   
+  max-height: fit-content;
 }
 
 button
 {
-width: 100px;
+  width: 100px;
 }
 
-mat-card
+.mat-card
 {
-    background-color: white;
-    color: blue;
+  width:98%;
+  background-color: white;
+  color: blue;
 }
 
-textarea
+
+
+.table-container
+{  
+  width:100%;
+  align-self: self-start;
+  max-height:280px; 
+  overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
+  display: block;
+  background-color: lightgrey;
+}
+  
+.mat-header-row 
 {
-    width:95%;
-    height:calc(100% - 27px);   
+   position: sticky;
+   top: 0; /* ทำให้ header คงที่ตอนเลื่อน */
+   z-index: 1; /* ให้ header อยู่ด้านบนสุด */
+   background-color: lightblue; /* เปลี่ยนพื้นหลังเพื่อให้ header ดูเด่น */
+}  
+
+.view-container
+{
+  display:flex;  
+  width: 98%; /* กำหนดความกว้างของ container ให้เต็มหน้าจอ */   
+  height: calc(350px + 300px);
+  grid-template-columns: 1fr 1fr; /* สร้าง 2 คอลัมน์ */
+  gap: 20px; /* กำหนดระยะห่างระหว่าง container */
+}
+  
+.half-column-container 
+{   
+  width:50%; /* กำหนดความกว้างของแต่ละคอลัมน์ให้เป็น 50% */  
+  max-height:350px;    
+  background-color: white; 
+  padding: 10px; /* ปรับระยะห่างภายใน */
+  border-radius: 25px;         /* มุมโค้งมน */
+  padding: 15px;               /* ระยะห่างภายใน */   
+  box-sizing: border-box; /* คำนวณ padding ในขนาดของ element */
 }
 
-.table-container {
-    height: 300px;
-    width:100%;
-    overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
-    display: block;
-    background-color: lightgrey;
-  }
-  
-  .mat-header-row {
-    position: sticky;
-    top: 0; /* ทำให้ header คงที่ตอนเลื่อน */
-    z-index: 1; /* ให้ header อยู่ด้านบนสุด */
-    background-color: lightblue; /* เปลี่ยนพื้นหลังเพื่อให้ header ดูเด่น */
-  }
-  
-  mat-header-cell {
-    padding: 8px 16px;
-  }
-  
-  .container {
-    display: flex;
-    width: 100%; /* กำหนดความกว้างของ container ให้เต็มหน้าจอ */
-  }
-  
-  .column {
-    width: 50%; /* กำหนดความกว้างของแต่ละคอลัมน์ให้เป็น 50% */
-    padding: 10px; /* ปรับระยะห่างภายใน */
-    box-sizing: border-box; /* คำนวณ padding ในขนาดของ element */
-  }
+.json-object-textarea
+{  
+  width: calc(100% - 5px);  
+  height: 280px; 
+  background-color: whitesmoke;
+}

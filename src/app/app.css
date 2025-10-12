@@ -1,12 +1,31 @@
-
 .main
-{
-    width:100vw;
-    max-height:100vh;
+{    
+    background-color:lavender;  
 }
-.mat-drawer-container
+
+.app-toolbar
 {
-    min-width:100vw;
+    background-color:lightcoral;
+}
+
+.app-drawer
+{
+    background-color:lightblue;
+}
+
+.app-drawer-content
+{
+    min-width:fit-content;
+    height:calc(100vh - (64px + 32px)); /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
+    min-height: max-content;
+    /*background-color:blue;*/
+    color:black;
+    background-color: cadetblue;
+}
+
+.outlet
+{
+    height:calc(100vh - (64px + 32px));       
 }
 
 .toggle-menu
@@ -14,11 +33,7 @@
     cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
 }
 
-.header
-{
-  background-color: lightgray;
-  height: 65px;
-}
+
 
 /* เอฟเฟกต์เมื่อเมาส์ลากผ่าน (hover) */
 mat-toolbar-row:hover {
@@ -34,11 +49,22 @@ mat-toolbar-row:hover {
     padding: 0 14px;
 }
 
-.mat-drawer-content
-{
-    min-width:fit-content;
-    height:calc(100vh - 80px); /* ความสูงเต็มหน้าจอลบกับความสูงของ header */
-    min-height: max-content;
-    background-color:gray;
-    color: whitesmoke;
+
+
+.header
+{  
+  height:65px;
+  background-color: blue;
 }
+
+.footer
+{ 
+  display:flex; 
+  height:32px; 
+  color:gray;
+  background-color:var(--footer-background-color);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
