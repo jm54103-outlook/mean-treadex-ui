@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { JsonPipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,18 +14,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableModule} from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatTree, MatTreeModule } from '@angular/material/tree';
+import { MatTree, MatTreeModule, MatTreeNode } from '@angular/material/tree';
 import { Guid } from 'guid-typescript';
 import { NgFor } from '@angular/common'; // ✅ ต้อง import NgFor ด้วย
 
 
 export interface KeyValue {
-  id: number;
+  treeid: Guid;
+  id: Guid;
   key: string;
   value: string;
 }
+
 interface TreeNode {
   id?: Guid;
   name: string;
@@ -39,7 +41,8 @@ let TreeNodes : TreeNode[] = [
       {id:Guid.create(), name: 'JsonObject1'},
       {id:Guid.create(), name: 'JsonObject2'},
       {id:Guid.create(), name: 'JsonObject3'},
-
+      {id:Guid.create(), name: 'JsonObject4'},
+      {id:Guid.create(), name: 'JsonObject5'},
       ],
   }  
 ];
@@ -69,7 +72,8 @@ let TreeNodes : TreeNode[] = [
   templateUrl: './json-doc.html',
   styleUrl: './json-doc.css'
 })
-export class JsonDoc {
+export class JsonDoc implements AfterViewInit{
+
 
   dataSourceTreeNode = TreeNodes;
   childrenAccessor = (node: TreeNode) => node.children ?? [];
@@ -80,17 +84,20 @@ export class JsonDoc {
   disabledRemove=true;
 
   dataTable: KeyValue[]=[];
+  dataSourceTable:KeyValue[]=[];
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+  @ViewChildren(MatTreeNode) treeNodes!: QueryList<MatTreeNode<TreeNode>>;
 
   readonly dialog = inject(MatDialog);
-  displayedColumns: string[] = ['id', 'key', 'value'];
+  displayedColumns: string[] = ['treeid','id', 'key', 'value'];
 
   form!:FormGroup; 
   jsonText="";
   jsonObject={};
-  jsonSelectedTreeNode!:TreeNode;
+  jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
  
   constructor(
     private fb: FormBuilder ,   
@@ -100,8 +107,17 @@ export class JsonDoc {
   } 
   
   ngOnInit(): void {   
-    this.build();
+    this.build();      
+    
   }
+  
+
+  ngAfterViewInit(): void {
+    let rootTreeNode=this.dataSourceTreeNode[0];     
+    this.tree.expand(rootTreeNode);  
+    this.getJsonObjectFromDataTableSource();     
+  }
+
   
   build()
   {
@@ -111,12 +127,16 @@ export class JsonDoc {
     });
   }
 
+  hasSelectedJsonSelectedTreeNode(){
+    return this.jsonSelectedTreeNode.id?.isEmpty();
+  }
 
+  setKeyValue(t:Guid,i:Guid,k:string,v:string)
+  {
 
-  setKeyValue(i:number,k:string,v:string){
+    let e:KeyValue={treeid:t, id:i, key:k, value:v};
+    let row=this.dataTable.find(row=>row.id==i);
     
-    let e:KeyValue={id:i, key:k, value:v};
-    let row=this.dataTable.at(i-1);
     if(row==null)
     {    
       this.dataTable.push(e);
@@ -125,18 +145,22 @@ export class JsonDoc {
     {
       row.key=k;
       row.value=v;     
-    }
-    
-    this.table.renderRows();
-    this.getJsonObjectFromArray();
+    }           
     this.form.reset();
+    this.getJsonObjectFromDataTableSource();    
 
   }
 
-  getJsonObjectFromArray()
-  {
+  getJsonObjectFromDataTableSource()
+  {    
+    const treeid=this.jsonSelectedTreeNode.id;
+    if(treeid!=null)
+    {           
+      this.dataSourceTable=this.dataTable.filter(row=>row.treeid==treeid);
+      this.table.renderRows();
+    }
     this.jsonText=`{ `;
-    this.dataTable.forEach(e=>{
+    this.dataSourceTable.forEach(e=>{
       let value=e.value;
       let row="";
       switch(value)
@@ -154,7 +178,7 @@ export class JsonDoc {
           row=`"${e.key}":{ }`;
           break;
       }
-      this.jsonText+= (this.dataTable[0].key==e.key) ? row : `,${row}`;
+      this.jsonText+= (this.dataSourceTable[0].key==e.key) ? row : `,${row}`;
 
     });
     this.jsonText+=` }`;
@@ -166,19 +190,19 @@ export class JsonDoc {
 
   }
 
-  selectedIndexTab=1;
-
   onClickJsonTreeNode(node:TreeNode){
     if(node.id==null)
     {
        console.log(`onClickJsonTreeNode():${node.id}}`);
-       this.selectedIndexTab = 0;
+       this.tabGroup.selectedIndex = 0;
+       this.tree.collapseAll();
     }
     else
     {
       console.log(`onClickJsonTreeNode():${node.id}}`);
-      this.selectedIndexTab = 1;
+      this.tabGroup.selectedIndex = 1;
       this.jsonSelectedTreeNode=node;
+      this.getJsonObjectFromDataTableSource();
     }    
   }
 
@@ -187,18 +211,25 @@ export class JsonDoc {
       const keyName=this.form.controls['keyName'].value;
       const keyValue=this.form.controls['keyValue'].value;
 
-      let found=this.dataTable.filter(e=>e.key==keyName).length>0;
-      console.log(`found:${found}`);
-      let max=0;
+      const treeid=this.jsonSelectedTreeNode.id;
+      let found=this.dataTable.filter(row=>row.treeid==treeid && row.key==keyName ).length>0;
+      console.log(`found:${found}`);      
       if(!found)
-      {
-        this.dataTable.forEach(e=>{
-          max=(e.id>max) ? e.id : max;
-        });
-        let id=max+1;
+      {               
+               
+        let id=Guid.create();
         console.log(id);
-        this.setKeyValue(id,keyName,keyValue);
-        this.getJsonObjectFromArray();          
+        if(treeid!=null)
+        {
+          this.setKeyValue(treeid,id,keyName,keyValue);
+          this.getJsonObjectFromDataTableSource();     
+        }  
+        else
+        {
+          const warn = `Does not have selected tree node of JsonObject.`
+          console.warn(warn)
+        }
+           
       }
       else
       {
@@ -209,22 +240,24 @@ export class JsonDoc {
         });
         console.warn(warn)
       }
-
   }
 
 
-  selected_id=0;
+  selectedAttributeId!:Guid;
   onClickEdit()
   {
 
-    let id=this.selected_id;
+    let id=this.selectedAttributeId;
     console.log(`onClickEdit(${id})`);
 
     let key = this.form.controls['keyName'].value;
     let value =  this.form.controls['keyValue'].value;
-   
- 
-    this.setKeyValue(id, key, value);
+
+    if(this.jsonSelectedTreeNode.id!=null)
+    {
+      const treeid=this.jsonSelectedTreeNode.id;
+      this.setKeyValue(treeid, id, key, value);
+    }     
 
     this.disabledAdd=false;
     this.disabledEdit=true;
@@ -236,11 +269,11 @@ export class JsonDoc {
   {
     this.form.reset();
 
-    let Index=this.dataTable.findIndex(e=>e.id==this.selected_id);
+    let Index=this.dataTable.findIndex(e=>e.id==this.selectedAttributeId);
     console.log(`this.data.findIndex:${Index}`);   
-    this.dataTable=this.dataTable.filter(e=>e.id!=this.selected_id);
+    this.dataTable=this.dataTable.filter(e=>e.id!=this.selectedAttributeId);
     console.log(`this.data.length:${this.dataTable.length}`);
-    this.getJsonObjectFromArray();     
+    this.getJsonObjectFromDataTableSource();     
     this.table.renderRows();
 
     this.disabledAdd=false;
@@ -252,11 +285,10 @@ export class JsonDoc {
   onClickSelectedRow(kv:any)
   {
     console.log(`onClickSelectedRow(${kv.id})`);
-    this.selected_id=kv.id;
+    this.selectedAttributeId=kv.id;
 
     this.form.reset();
 
-   
     this.form.controls['keyName'].setValue(kv.key);
     this.form.controls['keyValue'].setValue(kv.value);
     
@@ -266,5 +298,19 @@ export class JsonDoc {
   
   }
 
+  onChangeSelectedIndexTab()
+  {
+    
+    console.log(`onChangeSelectedIndexTab(${this.tabGroup.selectedIndex})`);
+    if(this.tabGroup.selectedIndex==0)
+    {                   
+        let rootTreeNode=this.dataSourceTreeNode[0];     
+        console.log(`${rootTreeNode.name}`)
+        if(this.tree.isExpanded(rootTreeNode))
+        {
+           this.tree.collapse(rootTreeNode); 
+        }        
+    }
+  }
 
 }

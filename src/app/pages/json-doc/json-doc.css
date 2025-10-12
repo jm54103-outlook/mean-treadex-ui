@@ -1,7 +1,22 @@
+.mat-tree-node:hover
+{
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+    color: black; /* เปลี่ยนสีตัวอักษร */
+    font-weight: bold;
+    background-color:lightgoldenrodyellow; /* เปลี่ยนสีพื้นหลัง */   
+    transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
+    cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
+}
+
+.mat-drawer-content{
+  width:100%; 
+}
+
 button
 {
 width: 100px;
 }
+
 mat-card
 {
     background-color: white;
@@ -11,8 +26,7 @@ mat-card
 textarea
 {
     width:95%;
-    height:calc(100% - 27px);
-   
+    height:calc(100% - 27px);   
 }
 
 .table-container {
@@ -23,7 +37,7 @@ textarea
     background-color: lightgrey;
   }
   
-  .mat-header-row{
+  .mat-header-row {
     position: sticky;
     top: 0; /* ทำให้ header คงที่ตอนเลื่อน */
     z-index: 1; /* ให้ header อยู่ด้านบนสุด */

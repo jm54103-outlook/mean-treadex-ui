@@ -26,9 +26,9 @@
       </mat-tree-node>      
     </mat-tree>
   </mat-drawer>
-  <mat-drawer-content style="width:100%">Main content
-    <mat-tab-group animationDuration="500ms" [selectedIndex]="selectedIndexTab">
-      <mat-tab label="Object">
+  <mat-drawer-content>Main content
+    <mat-tab-group #tabs animationDuration="500ms" (selectedIndexChange)="onChangeSelectedIndexTab()">
+      <mat-tab label="Object"  [disabled]="tree.isExpanded(dataSourceTreeNode[0])" >
           <h3>Json Object List</h3>                               
               <li *ngFor="let node of this.dataSourceTreeNode"> 
                 {{ node?.name || 'No ID Available' }}
@@ -37,7 +37,7 @@
                 </pre>               
               </li>                                          
       </mat-tab>
-      <mat-tab label="Attributes">
+      <mat-tab label="Attributes"  [disabled]="!tree.isExpanded(dataSourceTreeNode[0]) || hasSelectedJsonSelectedTreeNode()">
           <h3>Json Object Attributes</h3>    
         <mat-card>
   <mat-card-title >
@@ -72,19 +72,29 @@
           &nbsp; 
       </form>
   </mat-card-content>
-        </mat-card>
-        <div class="container">
+  </mat-card>
+  <div class="container">
     <div class="column">
       <!-- เนื้อหาของคอลัมน์แรก -->
       <label style="font-weight: bold;">Field List</label>
       <div class="table-container">     
-        <table mat-table [dataSource]="dataTable"  >
+        <table mat-table [dataSource]="dataSourceTable"  >
         <!--- Note that these columns can be defined in any order.px
               The actual rendered columns are set as a property on the row definition" -->
+
+         <!-- key Column -->
+         <ng-container matColumnDef="treeid">
+          <th mat-header-cell *matHeaderCellDef style="width:50px;">obj</th>        
+          <td mat-cell *matCellDef="let kv">                
+            <span class="material-symbols-outlined" title="{{kv.treeid}}" >
+              file_json
+             </span>  
+          </td>
+        </ng-container>
   
         <!-- key Column -->
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>
+          <th mat-header-cell *matHeaderCellDef style="width:50px;">id</th>        
           <td mat-cell *matCellDef="let kv">
             <button matIconButton (click)="onClickSelectedRow(kv)" title="{{kv.id}}" style="width:45px;">
               <mat-icon>edit</mat-icon>
@@ -104,8 +114,8 @@
           <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
         </ng-container>
   
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
       
         </table>
       </div> 
