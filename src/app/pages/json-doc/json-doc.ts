@@ -72,32 +72,41 @@ let TreeNodes : TreeNode[] = [
   templateUrl: './json-doc.html',
   styleUrl: './json-doc.css'
 })
-export class JsonDoc implements AfterViewInit{
+export class JsonDoc implements AfterViewInit
+{
 
+ 
+
+  readonly dialog = inject(MatDialog);
 
   dataSourceTreeNode = TreeNodes;
   childrenAccessor = (node: TreeNode) => node.children ?? [];
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
+  
+  displayedColumns: string[] = ['treeid','id', 'key', 'value'];
+
   disabledAdd=false;
   disabledEdit=true;
   disabledRemove=true;
-
+  
+  /*--All attributes of Json Objects--*/
   dataTable: KeyValue[]=[];
+  /*--The attributes of selected Json Object--*/
   dataSourceTable:KeyValue[]=[];
+  
+  form!:FormGroup; 
+  jsonText="";
+  jsonObject={};
+  jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
+
+  selectedAttributeId!:Guid;
+
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
   @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   @ViewChildren(MatTreeNode) treeNodes!: QueryList<MatTreeNode<TreeNode>>;
-
-  readonly dialog = inject(MatDialog);
-  displayedColumns: string[] = ['treeid','id', 'key', 'value'];
-
-  form!:FormGroup; 
-  jsonText="";
-  jsonObject={};
-  jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
  
   constructor(
     private fb: FormBuilder ,   
@@ -107,18 +116,15 @@ export class JsonDoc implements AfterViewInit{
   } 
   
   ngOnInit(): void {   
-    this.build();      
-    
+    this.build();          
   }
   
-
   ngAfterViewInit(): void {
     let rootTreeNode=this.dataSourceTreeNode[0];     
     this.tree.expand(rootTreeNode);  
     this.getJsonObjectFromDataTableSource();     
   }
-
-  
+ 
   build()
   {
     this.form=this.fb.group({
@@ -183,10 +189,10 @@ export class JsonDoc implements AfterViewInit{
     });
     this.jsonText+=` }`;
     
-    console.log(this.jsonText);
+    //console.log(this.jsonText);
     this.jsonObject=JSON.parse(this.jsonText);
     this.jsonText=JSON.stringify(this.jsonObject,null,2)
-    console.log(this.jsonText);  
+    //console.log(this.jsonText);  
 
   }
 
@@ -242,8 +248,7 @@ export class JsonDoc implements AfterViewInit{
       }
   }
 
-
-  selectedAttributeId!:Guid;
+  
   onClickEdit()
   {
 

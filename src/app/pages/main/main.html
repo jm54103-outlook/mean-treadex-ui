@@ -25,6 +25,10 @@
                 <mat-icon class="menu-icon" aria-hidden="false" aria-label="หมวดหมู่" fontIcon="folder"></mat-icon>
                 <span>หมวดหมู่</span>
             </mat-toolbar-row>
+            <mat-toolbar-row #json class="menu-row" id="json" (click)="onClickMenu(json)">
+                <mat-icon class="menu-icon" aria-hidden="false" aria-label="JSON" fontIcon="box"></mat-icon>
+                <span>JSON</span>
+            </mat-toolbar-row>
             <mat-toolbar-row #settings class="menu-row" id="settings" (click)="onClickMenu(settings)">
                 <mat-icon class="menu-icon" aria-hidden="false" aria-label="ตั้งค่า" fontIcon="settings"></mat-icon>
                 <span>ตั้งค่า</span>

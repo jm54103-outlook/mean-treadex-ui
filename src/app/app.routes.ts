@@ -20,6 +20,7 @@ export const routes: Routes = [
     { path: 'person', component: PersonComponent },        
     { path: 'product', component: ProductComponent },  
     { path: 'category', component: CategoryComponent },  
+    { path: 'json', component: JsonDoc },  
     { path: 'settings', component: SettingsComponent },  
     { path: 'help', component: HelpComponent },  
     { path: 'about', component: AboutComponent },  

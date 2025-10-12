@@ -65,6 +65,10 @@ export class App {
           this.isOpenedMenu=true;
           this.router.navigate(['/category']);
          break;
+      case "json":
+          this.isOpenedMenu=false;          
+          this.router.navigate(['/json']);
+         break;
       case "settings":
           this.isOpenedMenu=true;
           this.router.navigate(['/settings']);

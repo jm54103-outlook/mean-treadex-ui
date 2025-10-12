@@ -28,6 +28,14 @@
             <mat-icon class="menu-icon" aria-hidden="false" aria-label="หมวดหมู่" fontIcon="folder"></mat-icon>
             <span i18n="@@menu-category">Category</span>
           </mat-toolbar-row>
+          <mat-toolbar-row #json class="menu-row" id="json" (click)="onClickMenu(json)"> 
+            &nbsp;&nbsp;&nbsp;           
+            <span class="material-symbols-outlined" >
+              file_json
+             </span>   
+             &nbsp;&nbsp;     
+            <span>JSON</span>
+          </mat-toolbar-row> 
           <mat-toolbar-row #settings class="menu-row" id="settings" (click)="onClickMenu(settings)">
             <mat-icon class="menu-icon" aria-hidden="false" aria-label="ตั้งค่า" fontIcon="settings"></mat-icon>
             <span i18n="@@menu-settings">Settings</span>
