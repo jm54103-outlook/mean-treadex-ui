@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgFor } from '@angular/common';  // ✅ ต้อง import NgFor ด้วย
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -18,21 +18,10 @@ import { MatTabGroup, MatTabsModule } from '@angular/material/tabs';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTree, MatTreeModule, MatTreeNode } from '@angular/material/tree';
 import { Guid } from 'guid-typescript';
-import { NgFor } from '@angular/common'; // ✅ ต้อง import NgFor ด้วย
 
+import { KeyValue, KeyValueValidator, KeyValueInfomation} from './interface/KeyValue';
+import { TreeNode } from './interface/TreeNode';
 
-export interface KeyValue {
-  treeid: Guid;
-  id: Guid;
-  key: string;
-  value: string;
-}
-
-interface TreeNode {
-  id?: Guid;
-  name: string;
-  children?: TreeNode[];
-}
 
 let TreeNodes : TreeNode[] = [
   {
@@ -46,7 +35,6 @@ let TreeNodes : TreeNode[] = [
       ],
   }  
 ];
-
 
 @Component({
   selector: 'app-json-doc',
@@ -75,8 +63,6 @@ let TreeNodes : TreeNode[] = [
 export class JsonDoc implements AfterViewInit
 {
 
- 
-
   readonly dialog = inject(MatDialog);
 
   dataSourceTreeNode = TreeNodes;
@@ -84,14 +70,17 @@ export class JsonDoc implements AfterViewInit
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
   
-  displayedColumns: string[] = ['treeid','id', 'key', 'value'];
+  displayedColumns: string[] = ['treeid', 'id', 'key', 'value', 'info'];
 
   disabledAdd=false;
   disabledEdit=true;
   disabledRemove=true;
   
   /*--All attributes of Json Objects--*/
-  dataTable: KeyValue[]=[];
+  dataTableKeyValue: KeyValue[]=[];
+  dataTableValidator: KeyValueValidator[]=[];
+  dataTableKeyValueInfomation: KeyValueInfomation[]=[];
+
   /*--The attributes of selected Json Object--*/
   dataSourceTable:KeyValue[]=[];
   
@@ -108,12 +97,8 @@ export class JsonDoc implements AfterViewInit
   @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   @ViewChildren(MatTreeNode) treeNodes!: QueryList<MatTreeNode<TreeNode>>;
  
-  constructor(
-    private fb: FormBuilder ,   
-
-  ) 
-  {     
-  } 
+  constructor(private fb: FormBuilder)
+  {} 
   
   ngOnInit(): void {   
     this.build();          
@@ -127,6 +112,7 @@ export class JsonDoc implements AfterViewInit
  
   build()
   {
+    
     this.form=this.fb.group({
       keyName:['', [Validators.required]],   
       keyValue:['', [Validators.required]],   
@@ -137,24 +123,21 @@ export class JsonDoc implements AfterViewInit
     return this.jsonSelectedTreeNode.id?.isEmpty();
   }
 
-  setKeyValue(t:Guid,i:Guid,k:string,v:string)
-  {
-
-    let e:KeyValue={treeid:t, id:i, key:k, value:v};
-    let row=this.dataTable.find(row=>row.id==i);
-    
+  setKeyValue(object_id:Guid,keyId:Guid,keyName:string,keyValue:string)
+  {    
+    let row=this.dataTableKeyValue.find(row=>row.treeid==object_id && row.id==keyId);    
     if(row==null)
-    {    
-      this.dataTable.push(e);
+    { 
+      let e:KeyValue={treeid:object_id, id:keyId, key:keyName, value:keyValue};  
+      this.dataTableKeyValue.push(e);
     }
     else
     {
-      row.key=k;
-      row.value=v;     
+      row.key=keyName;
+      row.value=keyValue;     
     }           
     this.form.reset();
     this.getJsonObjectFromDataTableSource();    
-
   }
 
   getJsonObjectFromDataTableSource()
@@ -162,7 +145,7 @@ export class JsonDoc implements AfterViewInit
     const treeid=this.jsonSelectedTreeNode.id;
     if(treeid!=null)
     {           
-      this.dataSourceTable=this.dataTable.filter(row=>row.treeid==treeid);
+      this.dataSourceTable=this.dataTableKeyValue.filter(row=>row.treeid==treeid);
       this.table.renderRows();
     }
     this.jsonText=`{ `;
@@ -218,7 +201,7 @@ export class JsonDoc implements AfterViewInit
       const keyValue=this.form.controls['keyValue'].value;
 
       const treeid=this.jsonSelectedTreeNode.id;
-      let found=this.dataTable.filter(row=>row.treeid==treeid && row.key==keyName ).length>0;
+      let found=this.dataTableKeyValue.filter(row=>row.treeid==treeid && row.key==keyName ).length>0;
       console.log(`found:${found}`);      
       if(!found)
       {               
@@ -247,7 +230,6 @@ export class JsonDoc implements AfterViewInit
         console.warn(warn)
       }
   }
-
   
   onClickEdit()
   {
@@ -274,10 +256,10 @@ export class JsonDoc implements AfterViewInit
   {
     this.form.reset();
 
-    let Index=this.dataTable.findIndex(e=>e.id==this.selectedAttributeId);
+    let Index=this.dataTableKeyValue.findIndex(e=>e.id==this.selectedAttributeId);
     console.log(`this.data.findIndex:${Index}`);   
-    this.dataTable=this.dataTable.filter(e=>e.id!=this.selectedAttributeId);
-    console.log(`this.data.length:${this.dataTable.length}`);
+    this.dataTableKeyValue=this.dataTableKeyValue.filter(e=>e.id!=this.selectedAttributeId);
+    console.log(`this.data.length:${this.dataTableKeyValue.length}`);
     this.getJsonObjectFromDataTableSource();     
     this.table.renderRows();
 
@@ -285,6 +267,14 @@ export class JsonDoc implements AfterViewInit
     this.disabledEdit=true;
     this.disabledRemove=true;
     
+  }
+
+  onClickCancel(){
+    this.selectedAttributeId=Guid.createEmpty();
+    this.form.reset();
+    this.disabledAdd=false;
+    this.disabledEdit=true;
+    this.disabledRemove=true;
   }
 
   onClickSelectedRow(kv:any)
