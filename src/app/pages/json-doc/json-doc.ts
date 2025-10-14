@@ -21,6 +21,7 @@ import { Guid } from 'guid-typescript';
 
 import { KeyValue, KeyValueValidator, KeyValueInfomation} from './interface/KeyValue';
 import { TreeNode } from './interface/TreeNode';
+import { MatSlideToggle } from "@angular/material/slide-toggle";
 
 
 let TreeNodes : TreeNode[] = [
@@ -39,6 +40,7 @@ let TreeNodes : TreeNode[] = [
 @Component({
   selector: 'app-json-doc',
   imports: [
+    NgFor,
     JsonPipe,
     MatSidenavModule,
     MatTabsModule,
@@ -54,8 +56,8 @@ let TreeNodes : TreeNode[] = [
     MatRadioModule,
     MatDatepickerModule,
     MatGridListModule,
-    ReactiveFormsModule // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***
-    ,NgFor
+    MatSlideToggle,
+    ReactiveFormsModule, // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***           
 ],
   templateUrl: './json-doc.html',
   styleUrl: './json-doc.css'
@@ -70,7 +72,7 @@ export class JsonDoc implements AfterViewInit
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
   
-  displayedColumns: string[] = ['treeid', 'id', 'key', 'value', 'info'];
+  displayedColumns: string[] = ['treeid', 'id', 'key', 'value', 'property'];
 
   disabledAdd=false;
   disabledEdit=true;
@@ -86,7 +88,9 @@ export class JsonDoc implements AfterViewInit
   
   form!:FormGroup; 
   jsonText="";
-  jsonObject={};
+  jsonDataObject={};
+  jsonValidatorObject={};
+  jsonInformationObject={};
   jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
 
   selectedAttributeId!:Guid;
@@ -94,7 +98,9 @@ export class JsonDoc implements AfterViewInit
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
-  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
+  @ViewChild('Tabs') Tabs!: MatTabGroup;
+  @ViewChild('KeyValueTabs') KeyValueTabs!: MatTabGroup;
+  @ViewChild('JsonObjectTabs') JsonObjectTabs!: MatTabGroup;
   @ViewChildren(MatTreeNode) treeNodes!: QueryList<MatTreeNode<TreeNode>>;
  
   constructor(private fb: FormBuilder)
@@ -173,8 +179,8 @@ export class JsonDoc implements AfterViewInit
     this.jsonText+=` }`;
     
     //console.log(this.jsonText);
-    this.jsonObject=JSON.parse(this.jsonText);
-    this.jsonText=JSON.stringify(this.jsonObject,null,2)
+    this.jsonDataObject=JSON.parse(this.jsonText);
+    this.jsonText=JSON.stringify(this.jsonDataObject,null,2)
     //console.log(this.jsonText);  
 
   }
@@ -183,13 +189,13 @@ export class JsonDoc implements AfterViewInit
     if(node.id==null)
     {
        console.log(`onClickJsonTreeNode():${node.id}}`);
-       this.tabGroup.selectedIndex = 0;
+       this.Tabs.selectedIndex = 0;
        this.tree.collapseAll();
     }
     else
     {
       console.log(`onClickJsonTreeNode():${node.id}}`);
-      this.tabGroup.selectedIndex = 1;
+      this.Tabs.selectedIndex = 1;
       this.jsonSelectedTreeNode=node;
       this.getJsonObjectFromDataTableSource();
     }    
@@ -296,8 +302,8 @@ export class JsonDoc implements AfterViewInit
   onChangeSelectedIndexTab()
   {
     
-    console.log(`onChangeSelectedIndexTab(${this.tabGroup.selectedIndex})`);
-    if(this.tabGroup.selectedIndex==0)
+    console.log(`onChangeSelectedIndexTab(${this.Tabs.selectedIndex})`);
+    if(this.Tabs.selectedIndex==0)
     {                   
         let rootTreeNode=this.dataSourceTreeNode[0];     
         console.log(`${rootTreeNode.name}`)
@@ -305,6 +311,28 @@ export class JsonDoc implements AfterViewInit
         {
            this.tree.collapse(rootTreeNode); 
         }        
+    }
+  }
+
+
+  onClickSelectPropertyTab(value:string)
+  {    
+    switch(value)
+    {
+      case 'data':      
+        this.JsonObjectTabs.selectedIndex=2;
+        console.log(`onClickSelectPropertyTab():${value}`)
+        break;
+      case 'validator':
+        this.JsonObjectTabs.selectedIndex=1;
+        console.log(`onClickSelectPropertyTab():${value}`)
+        break;
+      case 'information':        
+        this.JsonObjectTabs.selectedIndex=0;
+        console.log(`onClickSelectPropertyTab():${value}`)
+        break;
+     
+      
     }
   }
 

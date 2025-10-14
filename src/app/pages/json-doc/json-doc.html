@@ -27,7 +27,7 @@
     </mat-tree>
   </mat-drawer>
   <mat-drawer-content class="drawer-content">       
-    <mat-tab-group #tabs animationDuration="500ms" (selectedIndexChange)="onChangeSelectedIndexTab()">
+    <mat-tab-group #Tabs animationDuration="500ms" (selectedIndexChange)="onChangeSelectedIndexTab()">
       <mat-tab label="Object" class="mat-tab-label"  [disabled]="tree.isExpanded(dataSourceTreeNode[0])">
           <h3>Json Object List</h3>                               
               <li *ngFor="let node of this.dataSourceTreeNode"> 
@@ -79,79 +79,150 @@
           <br>
           <div class="view-container">
             <div class="half-column-container">
-              <!-- เนื้อหาของคอลัมน์แรก -->
-              <label style="font-weight: bold;">Field List</label>              
-              <div class="table-container">     
-                <table mat-table [dataSource]="dataSourceTable"  >
-                <!--- Note that these columns can be defined in any order.px
-                      The actual rendered columns are set as a property on the row definition" -->
+              <!-- เนื้อหาของคอลัมน์แรก -->              
+              <label style="margin-left:5px;font-weight:bold;">Field List</label>    
+              <br/>        
+              <mat-tab-group #KeyValueTabs >                
+                <mat-tab label="Table" class="mat-tab-label" >                                      
+                  <div class="table-container">     
+                    <table mat-table [dataSource]="dataSourceTable"  >
+                    <!--- Note that these columns can be defined in any order.px
+                          The actual rendered columns are set as a property on the row definition" -->
+    
+                    <!-- key Column -->
+                    <ng-container matColumnDef="treeid" style="text-align: center;">
+                      <th mat-header-cell *matHeaderCellDef style="width:50px;text-align: center;">obj</th>        
+                      <td mat-cell *matCellDef="let kv">                
+                        <span class="material-symbols-outlined" title="{{kv.treeid}}" >
+                          file_json
+                        </span>  
+                      </td>
+                    </ng-container>
+              
+                    <!-- key Column -->
+                    <ng-container matColumnDef="id" style="text-align: center;">
+                      <th mat-header-cell *matHeaderCellDef style="width:50px;text-align: center;">id</th>        
+                      <td mat-cell *matCellDef="let kv">
+                        <button matIconButton (click)="onClickSelectedRow(kv)" title="edit" style="width:45px;">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+              
+                    <!-- key Column -->
+                    <ng-container matColumnDef="key">
+                      <th mat-header-cell *matHeaderCellDef style="text-align: left;"> key</th>
+                      <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
+                    </ng-container>
+              
+                    <!-- value Column -->
+                    <ng-container matColumnDef="value">
+                      <th mat-header-cell *matHeaderCellDef style="text-align: left;"> value </th>
+                      <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
+                    </ng-container>
 
-                <!-- key Column -->
-                <ng-container matColumnDef="treeid" style="text-align: center;">
-                  <th mat-header-cell *matHeaderCellDef style="width:50px;text-align: center;">obj</th>        
-                  <td mat-cell *matCellDef="let kv">                
-                    <span class="material-symbols-outlined" title="{{kv.treeid}}" >
-                      file_json
-                    </span>  
-                  </td>
-                </ng-container>
-          
-                <!-- key Column -->
-                <ng-container matColumnDef="id" style="text-align: center;">
-                  <th mat-header-cell *matHeaderCellDef style="width:50px;text-align: center;">id</th>        
-                  <td mat-cell *matCellDef="let kv">
-                    <button matIconButton (click)="onClickSelectedRow(kv)" title="edit" style="width:45px;">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </td>
-                </ng-container>
-          
-                <!-- key Column -->
-                <ng-container matColumnDef="key">
-                  <th mat-header-cell *matHeaderCellDef style="text-align: left;"> key</th>
-                  <td mat-cell *matCellDef="let kv"> {{kv.key}} </td>
-                </ng-container>
-          
-                <!-- value Column -->
-                <ng-container matColumnDef="value">
-                  <th mat-header-cell *matHeaderCellDef style="text-align: left;"> value </th>
-                  <td mat-cell *matCellDef="let kv"> {{kv.value}} </td>
-                </ng-container>
-
-                 <!-- value Column -->
-                 <ng-container matColumnDef="info">
-                  <th mat-header-cell *matHeaderCellDef style="text-align: center;">info</th>
-                  <td mat-cell *matCellDef="let kv" style="display: flex; justify-content: center;"> 
-                    <button matIconButton style="width:45px;" title="Validator">
-                      <mat-icon>checklist</mat-icon>                      
-                    </button>                                       
-                    <button matIconButton style="width:45px;" title="Type & Format">
-                      <mat-icon>fact_check</mat-icon>                                             
-                    </button>    
-                    <button matIconButton style="width:45px;" title="Information">
-                      <mat-icon>info</mat-icon>
-                    </button>                  
-                  </td>
-                </ng-container>
-          
-                <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>              
-                </table>
-              </div> 
+                     <!-- value Column -->
+                     <ng-container matColumnDef="property">
+                      <th mat-header-cell *matHeaderCellDef style="text-align: center;width:200px">property</th>
+                      <td mat-cell *matCellDef="let kv" style="display: flex; justify-content: center;"> 
+                        <button matIconButton style="width:45px;" title="Information" (click)="onClickSelectPropertyTab('information')">
+                          <mat-icon>info</mat-icon>                                             
+                        </button>   
+                        <button matIconButton style="width:45px;" title="Validator" (click)="onClickSelectPropertyTab('validator')">
+                          <mat-icon>checklist</mat-icon>                      
+                        </button>                                                                   
+                        <button matIconButton style="width:45px;" title="Data Object" (click)="onClickSelectPropertyTab('data')">
+                          <mat-icon>data_object</mat-icon> 
+                        </button>                                                                                     
+                      </td>
+                    </ng-container>              
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: max-content;" ></tr>              
+                    </table>
+                  </div> 
+                </mat-tab>
+                <mat-tab label="Properties" class="mat-tab-label" > 
+                  <div class="div-property">
+                    Information            
+                    <div class="grid-container">
+                      <div class="caption-grid-item">Caption</div>
+                      <div class="input-grid-item">                                   
+                         <input type="text" maxlength="50"  value="" style="width:90%;">                        
+                      </div>
+                      <div class="caption-grid-item">Description</div>
+                      <div class="input-grid-item">
+                        <textarea style="width:90%;height:75px;" >
+                        </textarea>            
+                      </div>                 
+                    </div>  
+                    Validation            
+                    <div class="grid-container">
+                      <div class="caption-grid-item">Required</div>
+                      <div class="input-grid-item"><mat-slide-toggle>Yes</mat-slide-toggle></div>
+                      <div class="caption-grid-item">Type</div>
+                      <div class="input-grid-item">
+                        <select style="width:50%;">                                                    
+                          <option>decimal(20,2)</option>
+                          <option>decimal(20,5)</option>
+                          <option>integer</option>
+                          <option>float</option>
+                          <option>tinytext</option>
+                          <option>text</option>
+                        </select>
+                      </div>
+                      <div class="caption-grid-item">Length</div>
+                      <div class="input-grid-item">
+                        <input type="number" min="0" value="" style="width:75px;">            
+                      </div>
+                      <div class="caption-grid-item">Min Length</div>
+                      <div class="input-grid-item">
+                        <input type="number" min="0" value="" style="width:75px;">
+                      </div>
+                      <div class="caption-grid-item">Max Length</div>
+                      <div class="input-grid-item">
+                        <input type="number" min="0" value="" style="width:75px;">
+                      </div>
+                      <div class="caption-grid-item">Hint</div>
+                      <div class="input-grid-item"><input type="text" maxlength="150"  value="" style="width:90%;"></div>
+                      <div class="caption-grid-item">Min Value</div>
+                      <div class="input-grid-item">
+                        <input type="number" min="0" value="" style="width:50%;">
+                      </div>
+                      <div class="caption-grid-item">Max Value</div>
+                      <div class="input-grid-item">
+                        <input type="number" min="0" value="" style="width:50%;">
+                      </div>
+                      <div class="caption-grid-item">
+                        &nbsp;
+                      </div>
+                      <div class="input-grid-item">
+                        &nbsp;
+                      </div>
+                    </div>              
+                  </div>     
+                                           
+                </mat-tab>
+              </mat-tab-group>
             </div>
             <div class="half-column-container" >
               <!-- เนื้อหาของคอลัมน์ที่สอง -->             
-                <label style="font-weight: bold;">Json Object</label>
-                <br>
-                <textarea readonly class="json-object-textarea" >{{this.jsonObject | json}}</textarea>                          
+              <label style="margin-left:5px;font-weight:bold;">Json Object</label>      
+              <br>
+              <mat-tab-group #JsonObjectTabs>               
+                <mat-tab label="Information" class="mat-tab-label" >
+                  <textarea readonly class="json-object-textarea" >{{this.jsonInformationObject | json}}</textarea>       
+                </mat-tab>
+                <mat-tab label="Validator" class="mat-tab-label" >
+                  <textarea readonly class="json-object-textarea" >{{this.jsonValidatorObject | json}}</textarea>       
+                </mat-tab>
+                <mat-tab label="Data" class="mat-tab-label" >
+                  <textarea readonly class="json-object-textarea" >{{this.jsonDataObject | json}}</textarea>       
+                </mat-tab>
+              </mat-tab-group>                                 
             </div>
           </div>   
         </div>      
-      </mat-tab>
-      <mat-tab label="Form"> 
-         <h3>Design</h3> 
-         <h3>View</h3> 
-      </mat-tab>
+      </mat-tab>      
     </mat-tab-group>    
   </mat-drawer-content>
 </mat-drawer-container>

@@ -61,13 +61,11 @@ button
   color: blue;
 }
 
-
-
 .table-container
 {  
-  width:100%;
+  width:calc(100% - 30px);
   align-self: self-start;
-  max-height:280px; 
+  max-height:235px; 
   overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
   display: block;
   background-color: lightgrey;
@@ -103,7 +101,47 @@ button
 
 .json-object-textarea
 {  
-  width: calc(100% - 5px);  
-  height: 280px; 
+  width: calc(100% - 10px);  
+  margin-left: 0px;  
+  margin-right: 0px;  
+  height: 235px; 
   background-color: whitesmoke;
 }
+
+.div-property
+{
+  width: 100%;    
+  display: block;
+  max-height:235px; 
+  overflow: auto; 
+}
+
+.grid-container 
+{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(5, auto);  
+  width: 100%;                          
+  
+  gap: 1px;
+}
+
+.caption-grid-item 
+{    
+  background-color: white;
+  color: black;
+  padding: 2px;    
+  display: flex;
+  justify-content: flex-end;   /* ชิดขวา */
+  align-items: center;         /* กึ่งกลางแนวตั้ง */
+}
+
+.input-grid-item 
+{
+  background-color:whitesmoke;
+  color: black;
+  padding: 2px;
+  text-align: left;
+  border-radius: 4px;
+}
+

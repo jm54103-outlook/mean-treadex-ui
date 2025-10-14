@@ -7,18 +7,6 @@ export interface KeyValue {
     value: string;  
 }
 
-export interface KeyValueValidator {
-    treeid: Guid;
-    id: Guid;  
-    required : boolean;  
-    min : number;
-    max : number;
-    length : number;
-    minLength : number;
-    maxLength : number;
-    hint : string;
-}
-
 export interface KeyValueInfomation
 {
   treeid: Guid;
@@ -26,4 +14,21 @@ export interface KeyValueInfomation
   caption : string;
   description : string;
 }
+
+export interface KeyValueValidator 
+{
+    treeid: Guid;
+    id: Guid;  
+    required : boolean;  
+    type: string;
+    min : number;
+    max : number;
+    format : string;
+    length : number;
+    minLength : number;
+    maxLength : number;
+    hint : string;
+}
+
+
   

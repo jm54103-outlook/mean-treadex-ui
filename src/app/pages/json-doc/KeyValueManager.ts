@@ -24,7 +24,13 @@ export class KeyValueManager
     }   
   }
 
-  setKeyValueValidatorNumber(kv:KeyValue,_required:boolean,_min:number,_max:number,_hint:string) : void 
+  setKeyValueValidatorNumber(kv:KeyValue,
+    _required:boolean
+    ,_type:string
+    ,_format:string
+    ,_min:number
+    ,_max:number
+    ,_hint:string) : void 
   {    
     let row=this.page.dataTableValidator.find(row=>row.treeid==kv.treeid && row.id==kv.id);
     if(row==null)
@@ -33,8 +39,10 @@ export class KeyValueManager
             treeid: kv.treeid,
             id: kv.id,  
             required : _required,  
+            type : _type,
             min : _min,
             max : _max,
+            format : _format,
             length : 0,
             minLength : 0,
             maxLength : 0,
@@ -51,7 +59,14 @@ export class KeyValueManager
     }
   }
 
-  setKeyValueValidatorString(kv:KeyValue,_required:boolean,_minLength:number,_maxLength:number,_length:number,_hint:string)
+  setKeyValueValidatorString(kv:KeyValue
+    ,_required:boolean
+    ,_type:string
+    ,_format:string
+    ,_minLength:number
+    ,_maxLength:number
+    ,_length:number
+    ,_hint:string)
   {
     let row=this.page.dataTableValidator.find(row=>row.treeid==kv.treeid && row.id==kv.id);
     if(row==null)
@@ -59,7 +74,9 @@ export class KeyValueManager
         let e:KeyValueValidator={
             treeid: kv.treeid,
             id: kv.id,  
-            required : _required,  
+            required : _required, 
+            type :_type,
+            format : "",
             min : 0,
             max : 0,
             length : _length,
