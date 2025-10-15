@@ -1,3 +1,21 @@
+:root 
+{
+    --header-height: 64px;
+    --header-background-color: lightgray;
+    --footer-height: 32px;
+    --footer-background-color: lightgray;
+
+    --main-background-color:lavender;  
+    --app-toolbar-background-color: lightcoral;
+    --app-drawer-background-color:lightblue;
+
+    --outlet-height: calc(100vh - (var(--header-height) + var(--footer-height)));
+}
+
+
+
+
+
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }

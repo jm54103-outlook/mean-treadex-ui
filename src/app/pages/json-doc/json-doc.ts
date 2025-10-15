@@ -330,8 +330,7 @@ export class JsonDoc implements AfterViewInit
       case 'information':        
         this.JsonObjectTabs.selectedIndex=0;
         console.log(`onClickSelectPropertyTab():${value}`)
-        break;
-     
+        break;     
       
     }
   }
