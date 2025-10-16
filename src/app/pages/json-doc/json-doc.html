@@ -210,13 +210,28 @@
               <label style="margin-left:5px;font-weight:bold;">Json Object</label>      
               <br>
               <mat-tab-group #JsonObjectTabs>               
-                <mat-tab label="Information" class="mat-tab-label" >
+                <mat-tab class="mat-tab-label" >
+                  <ng-template mat-tab-label >
+                    <mat-icon>info</mat-icon>  
+                    &nbsp;
+                    <label>Information</label>
+                  </ng-template>
                   <textarea readonly class="json-object-textarea" >{{this.jsonInformationObject | json}}</textarea>       
                 </mat-tab>
-                <mat-tab label="Validator" class="mat-tab-label" >
+                <mat-tab class="mat-tab-label" >
+                  <ng-template mat-tab-label >
+                    <mat-icon>checklist</mat-icon>  
+                    &nbsp;
+                    <label>Validator</label>
+                  </ng-template>
                   <textarea readonly class="json-object-textarea" >{{this.jsonValidatorObject | json}}</textarea>       
                 </mat-tab>
-                <mat-tab label="Data" class="mat-tab-label" >
+                <mat-tab class="mat-tab-label" >
+                  <ng-template mat-tab-label >
+                    <mat-icon>data_object</mat-icon>  
+                    &nbsp;
+                    <label>Data</label>
+                  </ng-template>
                   <textarea readonly class="json-object-textarea" >{{this.jsonDataObject | json}}</textarea>       
                 </mat-tab>
               </mat-tab-group>                                 
