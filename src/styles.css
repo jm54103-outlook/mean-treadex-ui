@@ -10,11 +10,21 @@
     --app-drawer-background-color:lightblue;
 
     --outlet-height: calc(100vh - (var(--header-height) + var(--footer-height)));
+
+    --table-key-value-height: 270px;
 }
 
-
-
-
+/* ใช้ CSS selector ที่ตรงกับ MDC */
+.mdc-tab-group
+{
+    background-color: darkgray !important;  /* สีพื้นหลังเป็นสีเทา */
+}
+.mdc-tab.mdc-tab--active {
+    background-color: darkgray !important;  /* สีพื้นหลังเป็นสีเทา */
+    font-weight: bold !important;          /* ตัวอักษรหนา */
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;  
+  }
 
 /* You can add global styles to this file, and also import other style files */
 

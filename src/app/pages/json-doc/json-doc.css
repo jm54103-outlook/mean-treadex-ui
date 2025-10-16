@@ -3,7 +3,7 @@
   height: 100%;
 }
 
-mat-header-cell {
+.mat-header-cell {
   padding: 8px 16px;
 }
 
@@ -37,9 +37,9 @@ mat-header-cell {
   box-sizing: border-box;      /* นับ padding ในขนาดรวม */ 
 }
 
-.div-tab2
+.div-tab-attributes
 {
-  background-color: yellowgreen;
+  background-color: azure;
   justify-items: center;    
   min-height: var(--container-height); /* ใช้ตัวแปร */
  
@@ -57,14 +57,15 @@ button
   color: blue;
 }
 
-.table-container
+.div-table-container
 {  
-  width:calc(100% - 30px);
+  width:100%;
   align-self: self-start;
-  max-height:235px; 
+  height: var(--table-key-value-height);
   overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
   display: block;
-  background-color: lightgrey;
+  background-color: lightgray;
+  text-align: center;
 }
   
 .mat-header-row 
@@ -99,7 +100,7 @@ button
   width: calc(100% - 10px);  
   margin-left: 0px;  
   margin-right: 0px;  
-  height: 235px; 
+  height: var(--table-key-value-height);
   background-color: whitesmoke;
 }
 
@@ -107,8 +108,9 @@ button
 {
   width: 100%;    
   display: block;
-  max-height:235px; 
+  max-height: var(--table-key-value-height);
   overflow: auto; 
+  overflow-x: hidden;  
 }
 
 .grid-container 

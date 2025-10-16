@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, inject, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { JsonPipe, NgFor } from '@angular/common';  // ✅ ต้อง import NgFor ด้วย
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,7 @@ import { Guid } from 'guid-typescript';
 import { KeyValue, KeyValueValidator, KeyValueInfomation} from './interface/KeyValue';
 import { TreeNode } from './interface/TreeNode';
 import { MatSlideToggle } from "@angular/material/slide-toggle";
+
 
 
 let TreeNodes : TreeNode[] = [
@@ -60,7 +61,8 @@ let TreeNodes : TreeNode[] = [
     ReactiveFormsModule, // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***           
 ],
   templateUrl: './json-doc.html',
-  styleUrl: './json-doc.css'
+  styleUrl: './json-doc.css',
+  //encapsulation: ViewEncapsulation.None  // เปิดการใช้ global styles
 })
 export class JsonDoc implements AfterViewInit
 {

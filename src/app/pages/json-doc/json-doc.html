@@ -38,7 +38,7 @@
               </li>                                          
       </mat-tab>
       <mat-tab label="Attributes"  [disabled]="!tree.isExpanded(dataSourceTreeNode[0]) || hasSelectedJsonSelectedTreeNode()" >   
-        <div class="div-tab2">  
+        <div class="div-tab-attributes">  
           <p>&nbsp;</p>    
           <h3>Json Object Attributes</h3>    
           <mat-card class="mat-card">
@@ -82,10 +82,9 @@
               <!-- เนื้อหาของคอลัมน์แรก -->              
               <label style="margin-left:5px;font-weight:bold;">Field List</label>    
               <br/>        
-              <mat-tab-group #KeyValueTabs  class="mat-tab-group">                
-                <mat-tab label="Table" class="mat-tab-label" >  
-
-                  <div class="table-container">     
+              <mat-tab-group #KeyValueTabs>                
+                <mat-tab label="Table">  
+                  <div class="div-table-container">     
                     <table mat-table [dataSource]="dataSourceTable"  >
                     <!--- Note that these columns can be defined in any order.px
                           The actual rendered columns are set as a property on the row definition" -->
@@ -140,11 +139,14 @@
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="mat-header-row" ></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height: max-content;" ></tr>              
                     </table>
+                    <hr>
                   </div> 
                 </mat-tab>
-                <mat-tab label="Properties" class="mat-tab-label" > 
+                <mat-tab label="Properties"> 
                   <div class="div-property">
-                    Information            
+                    <div style="display:flex; width:100%; background-color: lightgray;  justify-content: flex-start; align-items: center;padding-left: 5px;">
+                      <mat-icon>info</mat-icon>  Information        
+                    </div>                        
                     <div class="grid-container">
                       <div class="caption-grid-item">Caption</div>
                       <div class="input-grid-item">                                   
@@ -156,7 +158,9 @@
                         </textarea>            
                       </div>                 
                     </div>  
-                    Validation            
+                    <div style="display:flex; width:100%; background-color: lightgray;  justify-content: flex-start; align-items: center;padding-left: 5px;">
+                      <mat-icon>checklist</mat-icon>  Validation            
+                    </div>                            
                     <div class="grid-container">
                       <div class="caption-grid-item">Required</div>
                       <div class="input-grid-item"><mat-slide-toggle>Yes</mat-slide-toggle></div>
