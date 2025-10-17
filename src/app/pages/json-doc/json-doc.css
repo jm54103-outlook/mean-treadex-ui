@@ -7,15 +7,15 @@
   padding: 8px 16px;
 }
 
-
 .tree-panel
 {
-  height: 100%;                /* ความสูงเต็มหน้าจอ */
-  width: 100%;                 /* กว้างเต็ม */
+  height: calc(100% - 12px);    /* ความสูงเต็มหน้าจอ */
+  width: calc(100% - 12px);     /* กว้างเต็ม */
   border-radius: 25px;         /* มุมโค้งมน */
-  background-color: gray;   /* สีพื้นหลัง (เปลี่ยนได้) */
+  background-color: gray;    /* สีพื้นหลัง (เปลี่ยนได้) */
   padding: 20px;               /* ระยะห่างภายใน */
   box-sizing: border-box;      /* นับ padding ในขนาดรวม */
+  margin: 5px;
 }
 
 .mat-tree-node:hover
@@ -23,26 +23,26 @@
   cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
   color: black; /* เปลี่ยนสีตัวอักษร */
   font-weight: bold;
-  background-color:lightgoldenrodyellow; /* เปลี่ยนสีพื้นหลัง */   
+  background-color:lightgray; /* เปลี่ยนสีพื้นหลัง */   
   transition: all 0.3s ease; /* ให้การเปลี่ยนแปลงมีความนุ่มนวล */
   cursor: pointer; /* เปลี่ยน cursor เป็นรูปมือ */
 }
 
 .drawer-content
 {
-  height: 100%;                         
-  background-color:lightblue;
+  height: calc(100% - 12px);      
+  background-color:lightgray;
   border-radius: 25px;         /* มุมโค้งมน */
   padding: 15px;               /* ระยะห่างภายใน */
   box-sizing: border-box;      /* นับ padding ในขนาดรวม */ 
+  margin: 5px;
 }
 
 .div-tab-attributes
 {
   background-color: azure;
   justify-items: center;    
-  min-height: var(--container-height); /* ใช้ตัวแปร */
- 
+  min-height: var(--container-height); /* ใช้ตัวแปร */ 
 }
 
 button
@@ -59,13 +59,14 @@ button
 
 .div-table-container
 {  
-  width:100%;
+  width: calc(100% -10px);
   align-self: self-start;
   height: var(--table-key-value-height);
   overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */
   display: block;
   background-color: lightgray;
   text-align: center;
+  padding: 5px;
 }
   
 .mat-header-row 
@@ -73,7 +74,7 @@ button
    position: sticky;
    top: 0; /* ทำให้ header คงที่ตอนเลื่อน */
    z-index: 1; /* ให้ header อยู่ด้านบนสุด */
-   background-color: lightblue; /* เปลี่ยนพื้นหลังเพื่อให้ header ดูเด่น */
+   background-color: gray;/* เปลี่ยนพื้นหลังเพื่อให้ header ดูเด่น */
 }  
 
 .view-container
@@ -111,6 +112,7 @@ button
   max-height: var(--table-key-value-height);
   overflow: auto; 
   overflow-x: hidden;  
+  background-color: whitesmoke;
 }
 
 .grid-container 
@@ -118,8 +120,7 @@ button
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(5, auto);  
-  width: 100%;                          
-  
+  width: 100%;                            
   gap: 1px;
 }
 
