@@ -59,7 +59,7 @@ button
 
 .div-table-container
 {  
-  width: calc(100% -10px);
+  width: calc(100% - 10px);
   align-self: self-start;
   height: var(--table-key-value-height);
   overflow: auto; /* ทำให้ตารางสามารถเลื่อน (scroll) ได้ */

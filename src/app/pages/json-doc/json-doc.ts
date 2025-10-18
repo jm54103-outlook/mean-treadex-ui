@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, inject, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { JsonPipe, NgFor } from '@angular/common';  // ✅ ต้อง import NgFor ด้วย
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -58,6 +58,7 @@ let TreeNodes : TreeNode[] = [
     MatDatepickerModule,
     MatGridListModule,
     MatSlideToggle,
+    FormsModule,
     ReactiveFormsModule, // ใช้สำหรับฟอร์มแบบ Reactive *** FormGroup Binding ***           
 ],
   templateUrl: './json-doc.html',
@@ -73,7 +74,6 @@ export class JsonDoc implements AfterViewInit
   childrenAccessor = (node: TreeNode) => node.children ?? [];
   hasChild = (_: number, node: TreeNode) => !!node.children && node.children.length > 0;
 
-  
   displayedColumns: string[] = ['treeid', 'id', 'key', 'value', 'property'];
 
   disabledAdd=false;
@@ -91,12 +91,28 @@ export class JsonDoc implements AfterViewInit
   form!:FormGroup; 
   jsonText="";
   jsonDataObject={};
-  jsonValidatorObject={};
-  jsonInformationObject={};
+  jsonValidatorObject={
+    treeid: Guid.createEmpty(),
+    id: Guid.createEmpty(),
+    required : false,
+    type: "",
+    min : null,
+    max : null,
+    format : "",
+    length : null,
+    minLength : null,
+    maxLength : null,
+    hint : "",
+  };
+  jsonInformationObject={
+    treeid: Guid.createEmpty(),
+    id: Guid.createEmpty(),
+    caption:"",
+    description:""
+  };
   jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
 
   selectedAttributeId!:Guid;
-
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
@@ -104,6 +120,9 @@ export class JsonDoc implements AfterViewInit
   @ViewChild('KeyValueTabs') KeyValueTabs!: MatTabGroup;
   @ViewChild('JsonObjectTabs') JsonObjectTabs!: MatTabGroup;
   @ViewChildren(MatTreeNode) treeNodes!: QueryList<MatTreeNode<TreeNode>>;
+
+  disableKeyValuePropertiesTab=true;
+  disableJsonObjectTabs=true;
  
   constructor(private fb: FormBuilder)
   {} 
@@ -115,7 +134,9 @@ export class JsonDoc implements AfterViewInit
   ngAfterViewInit(): void {
     let rootTreeNode=this.dataSourceTreeNode[0];     
     this.tree.expand(rootTreeNode);  
-    this.getJsonObjectFromDataTableSource();     
+    this.getJsonObjectFromDataTableSource();    
+    this.KeyValueTabs.selectedIndex=0;    
+    this.JsonObjectTabs.selectedIndex=2;
   }
  
   build()
@@ -124,7 +145,8 @@ export class JsonDoc implements AfterViewInit
     this.form=this.fb.group({
       keyName:['', [Validators.required]],   
       keyValue:['', [Validators.required]],   
-    });
+    });           
+
   }
 
   hasSelectedJsonSelectedTreeNode(){
@@ -197,6 +219,8 @@ export class JsonDoc implements AfterViewInit
     else
     {
       console.log(`onClickJsonTreeNode():${node.id}}`);
+      this.disableKeyValuePropertiesTab=true;
+      this.disableJsonObjectTabs=true;
       this.Tabs.selectedIndex = 1;
       this.jsonSelectedTreeNode=node;
       this.getJsonObjectFromDataTableSource();
@@ -319,6 +343,8 @@ export class JsonDoc implements AfterViewInit
 
   onClickSelectPropertyTab(value:string)
   {    
+    this.disableKeyValuePropertiesTab=false;
+    this.disableJsonObjectTabs=false;
     switch(value)
     {
       case 'data':      
@@ -335,6 +361,23 @@ export class JsonDoc implements AfterViewInit
         break;     
       
     }
+  }
+
+  onFocusInformationProperty()
+  {
+    console.log(`onFocusInformationProperty()`);
+    this.JsonObjectTabs.selectedIndex=0;    
+  }
+
+  onFocusValidatorProperty()
+  {
+    console.log(`onFocusValidatorProperty()`);
+    this.JsonObjectTabs.selectedIndex=1;
+  }
+
+  onChangeKeyValueSelectedIndexTab(){
+    console.log(`onChangeKeyValueSelectedIndexTab()`);
+    this.JsonObjectTabs.selectedIndex=(this.KeyValueTabs.selectedIndex==0) ? 2 : 0;   
   }
 
 }
