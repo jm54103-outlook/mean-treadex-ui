@@ -127,13 +127,13 @@
                      <ng-container matColumnDef="property">
                       <th mat-header-cell *matHeaderCellDef style="text-align: center;width:200px">property</th>
                       <td mat-cell *matCellDef="let kv" style="display: flex; justify-content: center;"> 
-                        <button matIconButton style="width:45px;" title="Information" (click)="onClickSelectPropertyTab('information')">
+                        <button matIconButton style="width:45px;" title="Information" (click)="onClickSelectPropertyTab(kv,'information')">
                           <mat-icon>info</mat-icon>                                             
                         </button>   
-                        <button matIconButton style="width:45px;" title="Validator" (click)="onClickSelectPropertyTab('validator')">
+                        <button matIconButton style="width:45px;" title="Validator" (click)="onClickSelectPropertyTab(kv,'validator')">
                           <mat-icon>checklist</mat-icon>                      
                         </button>                                                                   
-                        <button matIconButton style="width:45px;" title="Data Object" (click)="onClickSelectPropertyTab('data')">
+                        <button matIconButton style="width:45px;" title="Data Object" (click)="onClickSelectPropertyTab(kv,'data')">
                           <mat-icon>data_object</mat-icon> 
                         </button>                                                                                     
                       </td>
@@ -152,15 +152,15 @@
                     <div class="grid-container">
                       <div class="caption-grid-item">Caption</div>
                       <div class="input-grid-item">                                   
-                         <input id="caption" type="text" maxlength="50"
+                         <input id="caption" type="text" maxlength="50" 
                           spellcheck="false" autocorrect="off" autocomplete="off" autocapitalize="off"                     
-                          (focus)="this.onFocusInformationProperty()" [(ngModel)]="this.jsonInformationObject.caption" style="width:90%;">                        
+                          (focus)="this.onFocusInformationProperty()" [(ngModel)]="this.selectedKeyNode.info.caption" style="width:90%;">                        
                       </div>
                       <div class="caption-grid-item">Description</div>
                       <div class="input-grid-item">
                         <textarea style="width:90%;height:75px;" 
                          spellcheck="false" autocorrect="off" autocomplete="off" autocapitalize="off"    
-                         (focus)="this.onFocusInformationProperty()" [(ngModel)]="this.jsonInformationObject.description" >
+                         (focus)="this.onFocusInformationProperty()" [(ngModel)]="this.selectedKeyNode.info.description" >
                         </textarea>            
                       </div>                 
                     </div>  
@@ -214,10 +214,9 @@
                         &nbsp;
                       </div>
                     </div>              
-                  </div>     
-                                           
-                </mat-tab>
-              </mat-tab-group>
+                  </div>                                                
+                </mat-tab>                
+              </mat-tab-group>              
             </div>
             <div class="half-column-container" >
               <!-- เนื้อหาของคอลัมน์ที่สอง -->    
@@ -232,7 +231,7 @@
                     &nbsp;
                     <label>Information</label>
                   </ng-template>
-                  <textarea readonly class="json-object-textarea" >{{this.jsonInformationObject | json}}</textarea>       
+                  <textarea readonly class="json-object-textarea" >{{this.selectedKeyNode.info | json}}</textarea>       
                 </mat-tab>
                 <mat-tab class="mat-tab-label" [disabled]="this.disableJsonObjectTabs">
                   <ng-template mat-tab-label >
@@ -240,7 +239,7 @@
                     &nbsp;
                     <label>Validator</label>
                   </ng-template>
-                  <textarea readonly class="json-object-textarea" >{{this.jsonValidatorObject | json}}</textarea>       
+                  <textarea readonly class="json-object-textarea" >{{this.selectedKeyNode.validator| json}}</textarea>       
                 </mat-tab>
                 <mat-tab class="mat-tab-label" [disabled]="this.disableJsonObjectTabs">
                   <ng-template mat-tab-label >
@@ -251,7 +250,7 @@
                   <textarea readonly class="json-object-textarea" >{{this.jsonDataObject | json}}</textarea>       
                 </mat-tab>
               </mat-tab-group>                                 
-            </div>
+            </div>           
           </div>
           <p>&nbsp;</p>   
         </div>      

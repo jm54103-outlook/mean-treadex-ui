@@ -19,7 +19,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTree, MatTreeModule, MatTreeNode } from '@angular/material/tree';
 import { Guid } from 'guid-typescript';
 
-import { KeyValue, KeyValueValidator, KeyValueInfomation} from './interface/KeyValue';
+import { KeyValue, KeyValueValidator, KeyValueInfomation, KeyNode} from './interface/KeyValue';
 import { TreeNode } from './interface/TreeNode';
 import { MatSlideToggle } from "@angular/material/slide-toggle";
 
@@ -27,6 +27,7 @@ import { MatSlideToggle } from "@angular/material/slide-toggle";
 
 let TreeNodes : TreeNode[] = [
   {
+    id:Guid.createEmpty(),
     name: 'JsonObjects',
     children: [
       {id:Guid.create(), name: 'JsonObject1'},
@@ -79,40 +80,44 @@ export class JsonDoc implements AfterViewInit
   disabledAdd=false;
   disabledEdit=true;
   disabledRemove=true;
+
   
   /*--All attributes of Json Objects--*/
-  dataTableKeyValue: KeyValue[]=[];
-  dataTableValidator: KeyValueValidator[]=[];
-  dataTableKeyValueInfomation: KeyValueInfomation[]=[];
-
+  dataTableKeyNode: KeyNode[]=[];
   /*--The attributes of selected Json Object--*/
-  dataSourceTable:KeyValue[]=[];
+  dataSourceTable:KeyValue[]=[]; //filter from dataTableKeyValue.
   
   form!:FormGroup; 
   jsonText="";
-  jsonDataObject={};
-  jsonValidatorObject={
+  jsonDataObject={
     treeid: Guid.createEmpty(),
-    id: Guid.createEmpty(),
+    id: Guid.createEmpty(), 
+    key: "",
+    value: ""  
+  };  
+  jsonValidatorObject={
     required : false,
     type: "",
-    min : null,
-    max : null,
+    min : 0,
+    max : 0,
     format : "",
-    length : null,
-    minLength : null,
-    maxLength : null,
+    length : 0,
+    minLength : 0,
+    maxLength : 0,
     hint : "",
   };
   jsonInformationObject={
-    treeid: Guid.createEmpty(),
-    id: Guid.createEmpty(),
     caption:"",
     description:""
   };
   jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
 
-  selectedAttributeId!:Guid;
+  //selectedAttributeId!:Guid;
+  selectedKeyNode:KeyNode={
+    data: this.jsonDataObject,
+    info: this.jsonInformationObject,
+    validator: this.jsonValidatorObject
+  }
 
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
@@ -136,46 +141,59 @@ export class JsonDoc implements AfterViewInit
     this.tree.expand(rootTreeNode);  
     this.getJsonObjectFromDataTableSource();    
     this.KeyValueTabs.selectedIndex=0;    
-    this.JsonObjectTabs.selectedIndex=2;
+    this.JsonObjectTabs.selectedIndex=2;  
   }
  
   build()
-  {
-    
+  {    
     this.form=this.fb.group({
       keyName:['', [Validators.required]],   
       keyValue:['', [Validators.required]],   
     });           
-
   }
 
   hasSelectedJsonSelectedTreeNode(){
     return this.jsonSelectedTreeNode.id?.isEmpty();
   }
 
-  setKeyValue(object_id:Guid,keyId:Guid,keyName:string,keyValue:string)
+  setKeyNode(node:KeyNode)
   {    
-    let row=this.dataTableKeyValue.find(row=>row.treeid==object_id && row.id==keyId);    
-    if(row==null)
-    { 
-      let e:KeyValue={treeid:object_id, id:keyId, key:keyName, value:keyValue};  
-      this.dataTableKeyValue.push(e);
+    let found=this.dataTableKeyNode.find(kv=>kv.data.treeid==node.data.treeid && kv.data.id==node.data.id);    
+    console.log(`setKeyNode()`);
+    console.log(`node.data.treeid:${node.data.treeid}`);
+    console.log(`node.data.id:${node.data.id}`);
+    console.log(`found KeyNode:${found?.data.key}`);
+
+    if(found==null)
+    {     
+      this.dataTableKeyNode.push(node);      
     }
     else
     {
-      row.key=keyName;
-      row.value=keyValue;     
+      found.data.key=node.data.key;
+      found.data.value=node.data.value;     
     }           
     this.form.reset();
     this.getJsonObjectFromDataTableSource();    
+  }
+
+  getDataSourceTable()
+  { 
+    let dataTableKeyValue:KeyValue[]=[];           
+    let KeyNodes=this.dataTableKeyNode.filter(node=>node.data.treeid==this.jsonSelectedTreeNode.id);        
+    KeyNodes.forEach(node=>{
+      dataTableKeyValue.push(node.data);      
+    });    
+    return dataTableKeyValue;
+
   }
 
   getJsonObjectFromDataTableSource()
   {    
     const treeid=this.jsonSelectedTreeNode.id;
     if(treeid!=null)
-    {           
-      this.dataSourceTable=this.dataTableKeyValue.filter(row=>row.treeid==treeid);
+    { 
+      this.dataSourceTable=this.getDataSourceTable();
       this.table.renderRows();
     }
     this.jsonText=`{ `;
@@ -204,13 +222,13 @@ export class JsonDoc implements AfterViewInit
     
     //console.log(this.jsonText);
     this.jsonDataObject=JSON.parse(this.jsonText);
-    this.jsonText=JSON.stringify(this.jsonDataObject,null,2)
+    this.jsonText=JSON.stringify(this.jsonDataObject,null,2);    
     //console.log(this.jsonText);  
 
   }
 
   onClickJsonTreeNode(node:TreeNode){
-    if(node.id==null)
+    if(node.id.isEmpty())
     {
        console.log(`onClickJsonTreeNode():${node.id}}`);
        this.Tabs.selectedIndex = 0;
@@ -223,26 +241,35 @@ export class JsonDoc implements AfterViewInit
       this.disableJsonObjectTabs=true;
       this.Tabs.selectedIndex = 1;
       this.jsonSelectedTreeNode=node;
-      this.getJsonObjectFromDataTableSource();
+      this.getJsonObjectFromDataTableSource();      
     }    
   }
+
+ 
 
   onClickAdd()
   {
       const keyName=this.form.controls['keyName'].value;
-      const keyValue=this.form.controls['keyValue'].value;
-
-      const treeid=this.jsonSelectedTreeNode.id;
-      let found=this.dataTableKeyValue.filter(row=>row.treeid==treeid && row.key==keyName ).length>0;
-      console.log(`found:${found}`);      
+      const keyValue=this.form.controls['keyValue'].value;      
+      
+      let found=this.dataTableKeyNode.filter(node=>node.data.treeid==this.jsonSelectedTreeNode.id && node.data.key==keyName ).length>0;
+      console.log(`found keyName :${found}`);      
       if(!found)
-      {               
-               
-        let id=Guid.create();
-        console.log(id);
-        if(treeid!=null)
-        {
-          this.setKeyValue(treeid,id,keyName,keyValue);
+      {                                         
+        if(this.jsonSelectedTreeNode.id != null)
+        {          
+          let kv:KeyValue={
+            treeid: this.jsonSelectedTreeNode.id,
+            id: Guid.create(),
+            key: keyName,
+            value: keyValue  
+          }      
+          let kn:KeyNode={           
+            data:kv,
+            info: this.jsonInformationObject,
+            validator: this.jsonValidatorObject
+          }    
+          this.setKeyNode(kn);
           this.getJsonObjectFromDataTableSource();     
         }  
         else
@@ -264,18 +291,28 @@ export class JsonDoc implements AfterViewInit
   }
   
   onClickEdit()
-  {
+  {  
+    console.log(`onClickEdit()`);
 
-    let id=this.selectedAttributeId;
-    console.log(`onClickEdit(${id})`);
+    let keyName = this.form.controls['keyName'].value;
+    let keyValue =  this.form.controls['keyValue'].value;
 
-    let key = this.form.controls['keyName'].value;
-    let value =  this.form.controls['keyValue'].value;
-
-    if(this.jsonSelectedTreeNode.id!=null)
+    if(!this.jsonSelectedTreeNode.id.isEmpty())
     {
-      const treeid=this.jsonSelectedTreeNode.id;
-      this.setKeyValue(treeid, id, key, value);
+      let kv:KeyValue={
+        treeid: this.selectedKeyNode.data.treeid,
+        id: this.selectedKeyNode.data.id,
+        key: keyName,
+        value: keyValue  
+      }  
+      this.jsonInformationObject.caption=keyName;   
+      this.jsonInformationObject.description=keyValue;
+      let kn:KeyNode={        
+        data: kv,
+        info: this.jsonInformationObject,
+        validator: this.jsonValidatorObject
+      }    
+      this.setKeyNode(kn);
     }     
 
     this.disabledAdd=false;
@@ -286,12 +323,9 @@ export class JsonDoc implements AfterViewInit
 
   onClickRemove()
   {
-    this.form.reset();
-
-    let Index=this.dataTableKeyValue.findIndex(e=>e.id==this.selectedAttributeId);
-    console.log(`this.data.findIndex:${Index}`);   
-    this.dataTableKeyValue=this.dataTableKeyValue.filter(e=>e.id!=this.selectedAttributeId);
-    console.log(`this.data.length:${this.dataTableKeyValue.length}`);
+    this.form.reset();   
+    this.dataTableKeyNode=this.dataTableKeyNode.filter(e=>e.data.id!=this.selectedKeyNode.data.id);
+    console.log(`this.data.length:${this.dataTableKeyNode.length}`);
     this.getJsonObjectFromDataTableSource();     
     this.table.renderRows();
 
@@ -301,8 +335,7 @@ export class JsonDoc implements AfterViewInit
     
   }
 
-  onClickCancel(){
-    this.selectedAttributeId=Guid.createEmpty();
+  onClickCancel(){    
     this.form.reset();
     this.disabledAdd=false;
     this.disabledEdit=true;
@@ -311,9 +344,17 @@ export class JsonDoc implements AfterViewInit
 
   onClickSelectedRow(kv:any)
   {
-    console.log(`onClickSelectedRow(${kv.id})`);
-    this.selectedAttributeId=kv.id;
-
+    console.log(`onClickSelectedRow()`); 
+    
+    let found=this.dataTableKeyNode.find(node=>node.data.treeid==kv.treeid && node.data.id==kv.id);
+    if(found)
+    {       
+      this.selectedKeyNode=found;
+      console.log(`found`);       
+      console.log(`key:${this.selectedKeyNode.data.key}`);
+      console.log(`caption:${this.selectedKeyNode.info.caption}`);
+    }          
+    
     this.form.reset();
 
     this.form.controls['keyName'].setValue(kv.key);
@@ -326,8 +367,7 @@ export class JsonDoc implements AfterViewInit
   }
 
   onChangeSelectedIndexTab()
-  {
-    
+  {    
     console.log(`onChangeSelectedIndexTab(${this.Tabs.selectedIndex})`);
     if(this.Tabs.selectedIndex==0)
     {                   
@@ -340,11 +380,10 @@ export class JsonDoc implements AfterViewInit
     }
   }
 
-
-  onClickSelectPropertyTab(value:string)
+  onClickSelectPropertyTab(kv:KeyValue,value:string)
   {    
     this.disableKeyValuePropertiesTab=false;
-    this.disableJsonObjectTabs=false;
+    this.disableJsonObjectTabs=false;  
     switch(value)
     {
       case 'data':      
@@ -358,20 +397,20 @@ export class JsonDoc implements AfterViewInit
       case 'information':        
         this.JsonObjectTabs.selectedIndex=0;
         console.log(`onClickSelectPropertyTab():${value}`)
-        break;     
-      
+        break;           
     }
   }
 
+
   onFocusInformationProperty()
   {
-    console.log(`onFocusInformationProperty()`);
+    console.log(`onFocusInformationProperty()`);  
     this.JsonObjectTabs.selectedIndex=0;    
   }
 
   onFocusValidatorProperty()
   {
-    console.log(`onFocusValidatorProperty()`);
+    console.log(`onFocusValidatorProperty()`);  
     this.JsonObjectTabs.selectedIndex=1;
   }
 
@@ -379,5 +418,5 @@ export class JsonDoc implements AfterViewInit
     console.log(`onChangeKeyValueSelectedIndexTab()`);
     this.JsonObjectTabs.selectedIndex=(this.KeyValueTabs.selectedIndex==0) ? 2 : 0;   
   }
-
+  
 }
