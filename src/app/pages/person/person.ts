@@ -117,7 +117,7 @@ export class PersonComponent {
         let modelKey:any;
         modelKey=formKey;      
         //console.log(`${modelKey}:${this.fs.getValue(this.person, modelKey)}`);
-        let value=this.fs.getValue(this.person, modelKey);
+        let value=this.fs.getValue(model, modelKey);
         this.personForm.controls[formKey].setValue(value);      
     });  
   }

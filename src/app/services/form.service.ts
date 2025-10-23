@@ -10,6 +10,9 @@ export class FormService {
   public getValue<T>(model: T, key: keyof T) {
     return model[key];
   }
+  public setValue<T>(model: T, key: keyof T, value:any){
+    model[key]=value;
+  }
 
   public formatTHDate(date:Date)
   {
