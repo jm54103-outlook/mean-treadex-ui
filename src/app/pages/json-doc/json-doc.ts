@@ -25,16 +25,17 @@ import { MatSlideToggle } from "@angular/material/slide-toggle";
 import { FormService } from '../../services/form.service';
 
 
+
 let TreeNodes : TreeNode[] = [
   {
-    id:Guid.createEmpty(),
+    object_id:Guid.createEmpty(),
     name: 'JsonObjects',
     children: [
-      {id:Guid.create(), name: 'JsonObject1'},
-      {id:Guid.create(), name: 'JsonObject2'},
-      {id:Guid.create(), name: 'JsonObject3'},
-      {id:Guid.create(), name: 'JsonObject4'},
-      {id:Guid.create(), name: 'JsonObject5'},
+      {object_id:Guid.create(), name: 'JsonObject1'},
+      {object_id:Guid.create(), name: 'JsonObject2'},
+      {object_id:Guid.create(), name: 'JsonObject3'},
+      {object_id:Guid.create(), name: 'JsonObject4'},
+      {object_id:Guid.create(), name: 'JsonObject5'},
       ],
   }  
 ];
@@ -88,36 +89,17 @@ export class JsonDoc implements AfterViewInit
   
   form!:FormGroup; 
   jsonText="";
+  
   jsonDataObject={
-    treeid: Guid.createEmpty(),
+    object_id: Guid.createEmpty(),
     id: Guid.createEmpty(), 
     key: "",
     value: ""  
-  };  
-  jsonValidatorObject={
-    required : false,
-    type: "",
-    min : 0,
-    max : 0,
-    format : "",
-    length : 0,
-    minLength : 0,
-    maxLength : 0,
-    hint : "",
   };
-  jsonInformationObject={
-    caption:"",
-    description:""
-  };
-  jsonSelectedTreeNode:TreeNode={id:Guid.createEmpty(),name:"",children:[]};
 
-  //selectedAttributeId!:Guid;
-  selectedKeyNode:KeyNode={
-    data: this.jsonDataObject,
-    info: this.jsonInformationObject,
-    validator: this.jsonValidatorObject
-  }
-
+  selectedJsonObject:TreeNode=this.createJsonOject();
+  selectedKeyNode:KeyNode=this.createKeyNode();
+  
   @ViewChild(MatTable) table!: MatTable<KeyValue>;
   @ViewChild(MatTree) tree!: MatTree<TreeNode>;
   @ViewChild('Tabs') Tabs!: MatTabGroup;
@@ -127,17 +109,27 @@ export class JsonDoc implements AfterViewInit
 
   disableKeyValuePropertiesTab=true;
   disableJsonObjectTabs=true;
+
+  options = [
+    { value: 'd2', viewValue: 'decimal(20,2)'},
+    { value: 'd5', viewValue: 'decimal(20,5)'},
+    { value: 'i', viewValue: 'integer' },
+    { value: 'f', viewValue: 'float' },
+    { value: 'tt', viewValue: 'tinytext'},
+    { value: 't', viewValue: 'text' },    
+  ];
  
   constructor(
      private fb: FormBuilder
     ,public fs: FormService 
   )
-  {} 
+  {    
+  } 
   
   ngOnInit(): void {   
-    this.build();          
+    this.build();       
   }
-  
+
   ngAfterViewInit(): void {
     let rootTreeNode=this.dataSourceTreeNode[0];     
     this.tree.expand(rootTreeNode);  
@@ -148,8 +140,8 @@ export class JsonDoc implements AfterViewInit
  
   build(): void {    
     this.form=this.fb.group({
-      key:['', [Validators.required]],   
-      value:['', [Validators.required]],   
+      key:[null, [Validators.required]],   
+      value:[null, [Validators.required]],   
       caption:[''],
       description:[''],
       required:[false],
@@ -164,15 +156,27 @@ export class JsonDoc implements AfterViewInit
     });           
   }
 
+  reset()
+  {
+   
+    this.form.reset({ emitEvent: false });   
+    
+    this.form.get('key')?.markAsPristine();
+    this.form.get('key')?.markAsUntouched();
+    this.form.get('value')?.markAsPristine();
+    this.form.get('value')?.markAsUntouched();
+  }
+
+
   hasSelectedJsonSelectedTreeNode(){
-    return this.jsonSelectedTreeNode.id?.isEmpty();
+    return this.selectedJsonObject.object_id?.isEmpty();
   }
 
   setKeyNode(node:KeyNode)
   {    
     console.log(`setKeyNode()`);  
 
-    let found=this.dataTableKeyNode.find(kv=>kv.data.treeid==node.data.treeid && kv.data.id==node.data.id);        
+    let found=this.dataTableKeyNode.find(kv=>kv.data.object_id==node.data.object_id && kv.data.id==node.data.id);        
 
     if(found==null)
     {     
@@ -182,18 +186,18 @@ export class JsonDoc implements AfterViewInit
     {
       this.setModelByFormControls(found.data);
       this.setModelByFormControls(found.info);
-      this.setModelByFormControls(found.validator);   
-    }           
-    
-    this.form.reset();    
+      this.setModelByFormControls(found.validator);       
+    }                   
     this.renderJsonObjectFromDataTableSource();    
 
   }
 
+
+
   getDataSourceTable()
   { 
     let dataTableKeyValue:KeyValue[]=[];           
-    let KeyNodes=this.dataTableKeyNode.filter(node=>node.data.treeid==this.jsonSelectedTreeNode.id);        
+    let KeyNodes=this.dataTableKeyNode.filter(node=>node.data.object_id==this.selectedJsonObject.object_id);        
     KeyNodes.forEach(node=>{
       dataTableKeyValue.push(node.data);      
     });    
@@ -202,7 +206,7 @@ export class JsonDoc implements AfterViewInit
 
   renderJsonObjectFromDataTableSource()
   {    
-    const treeid=this.jsonSelectedTreeNode.id;
+    const treeid=this.selectedJsonObject.object_id;
     if(treeid!=null)
     { 
       this.dataSourceTable=this.getDataSourceTable();
@@ -240,27 +244,40 @@ export class JsonDoc implements AfterViewInit
   }
 
   onClickJsonTreeNode(node:TreeNode){
-    if(node.id.isEmpty())
+    if(node.object_id.isEmpty())
     {
-       console.log(`onClickJsonTreeNode():${node.id}}`);
+       console.log(`onClickJsonTreeNode():${node.object_id}}`);
        this.Tabs.selectedIndex = 0;
        this.tree.collapseAll();
     }
     else
     {
-      console.log(`onClickJsonTreeNode():${node.id}}`);
+      console.log(`onClickJsonTreeNode():${node.object_id}}`);
       this.disableKeyValuePropertiesTab=true;
       this.disableJsonObjectTabs=true;
       this.Tabs.selectedIndex = 1;
-      this.jsonSelectedTreeNode=node;
+      this.selectedJsonObject=node;
       this.renderJsonObjectFromDataTableSource();      
     }    
+  }
+
+  createJsonOject(){
+    return {object_id:Guid.createEmpty(),name:"",children:[]};  
+  }
+
+  createKeyNode(){
+    let kn:KeyNode={
+      data:this.createKeyValue(),
+      info:this.createKeyValueInfomation(),
+      validator:this.createKeyValueValidator()
+    };
+    return kn;
   }
 
   createKeyValue()
   {
     let kv:KeyValue={
-      treeid: this.jsonSelectedTreeNode.id,
+      object_id: this.selectedJsonObject.object_id,
       id: Guid.create(),
       key: "",
       value: ""  
@@ -298,13 +315,12 @@ export class JsonDoc implements AfterViewInit
   {
       const _key=this.form.controls['key'].value;
       const _value=this.form.controls['value'].value;            
-
       
-      let found=this.dataTableKeyNode.filter(node=>node.data.treeid==this.jsonSelectedTreeNode.id && node.data.key==_key).length>0;
+      let found=this.dataTableKeyNode.filter(node=>node.data.object_id==this.selectedJsonObject.object_id && node.data.key==_key).length>0;
       console.log(`found keyName :${found}`);      
       if(!found)
       {                                         
-        if(this.jsonSelectedTreeNode.id != null)
+        if(this.selectedJsonObject.object_id != null)
         {                                         
           let k=this.createKeyValue();
           let i=this.createKeyValueInfomation();
@@ -318,6 +334,7 @@ export class JsonDoc implements AfterViewInit
             validator: v
           }    
 
+          this.reset();     
           this.setKeyNode(kn);
           this.renderJsonObjectFromDataTableSource();     
         }  
@@ -341,16 +358,16 @@ export class JsonDoc implements AfterViewInit
   
   onClickEdit()
   {  
-    console.log(`onClickEdit()`);
-    let found=this.dataTableKeyNode.find(node=>node.data.treeid==this.selectedKeyNode.data.treeid && node.data.id==this.selectedKeyNode.data.id);
+    console.log(`onClickEdit()`);  
+
+    let found=this.dataTableKeyNode.find(node=>node.data.object_id==this.selectedKeyNode.data.object_id && node.data.id==this.selectedKeyNode.data.id);
 
     if(found)
-    {          
+    {                
       this.setKeyNode(this.selectedKeyNode);  
       this.disabledAdd=false;
       this.disabledEdit=true;
       this.disabledRemove=true;
-
     }          
    
   }
@@ -369,20 +386,22 @@ export class JsonDoc implements AfterViewInit
     
   }
 
-  onClickCancel(){    
-    this.form.reset();
+  onClickCancel()
+  {    
     this.disabledAdd=false;
     this.disabledEdit=true;
     this.disabledRemove=true;
+    this.reset();   
   }
 
-  selectedRow(kv:any)
-  {        
-    this.form.reset();
-    let found=this.dataTableKeyNode.find(node=>node.data.treeid==kv.treeid && node.data.id==kv.id);
+ 
+  selectedRow(kv:KeyValue)
+  { 
+    this.reset();      
+    
+    let found=this.dataTableKeyNode.find(node=>node.data.object_id==kv.object_id && node.data.id==kv.id);
     if(found)
-    {       
-      
+    {          
 
       console.log(`found`);       
       
@@ -504,5 +523,54 @@ export class JsonDoc implements AfterViewInit
         }            
     });  
   }
+
+  onChangeSelectIndexType()
+  {
+    //console.log(`onChangeSelectIndexType()`);             
+    
+    let value=this.form.controls['type'].value;
+    let option=this.options.find(option=>option.value==value);
+
+    //console.log(`value:${value} viewValue:${option?.viewValue}`);         
+
+    let isNumber=false;
+
+    switch(value)
+    {
+      case "i":
+        isNumber=true; 
+        break;
+      case "f":
+        isNumber=true; 
+        break;
+      case "d2":
+          isNumber=true; 
+        break;
+      case "d5":
+        isNumber=true; 
+        break;
+      default:
+        isNumber=false;   
+        break;
+    }
+
+    if(isNumber)
+    {
+      this.form.controls['length'].disable();
+      this.form.controls['minLength'].disable();
+      this.form.controls['maxLength'].disable();      
+      this.form.controls['min'].enable();
+      this.form.controls['max'].enable();
+    }
+    else
+    {
+      this.form.controls['length'].enable();
+      this.form.controls['minLength'].enable();
+      this.form.controls['maxLength'].enable();    
+      this.form.controls['min'].disable();   
+      this.form.controls['max'].disable();   
+    }  
+
+  } 
   
 }

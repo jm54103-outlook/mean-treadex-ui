@@ -46,7 +46,7 @@
             <mat-card-title >
               <span>&nbsp;&nbsp;JSON</span>  
               <mat-card-subtitle>     
-                <label>&nbsp;&nbsp;&nbsp;{{(jsonSelectedTreeNode==undefined) ? "Not Avaliable!!!" : jsonSelectedTreeNode.name}}</label>    
+                <label>&nbsp;&nbsp;&nbsp;{{(this.selectedJsonObject==undefined) ? "Not Avaliable!!!" : this.selectedJsonObject.name}}</label>    
                 <br>  
               </mat-card-subtitle>
             </mat-card-title>
@@ -72,7 +72,9 @@
                   &nbsp; 
                   <button mat-raised-button #RemoveButton type="button" (click)="onClickRemove()" [disabled]="disabledRemove">remove</button>
                   &nbsp; 
-                  <button mat-raised-button #RemoveButton type="button" (click)="onClickCancel()" >cancel</button>             
+                  <button mat-raised-button #RemoveButton type="button" (click)="onClickCancel()" >cancel</button>        
+                  
+                  {{ this.form.valid | json}}
             </mat-card-content>
           </mat-card>         
           <br>
@@ -173,13 +175,8 @@
                       <div class="input-grid-item"><mat-slide-toggle  formControlName="required" >Yes</mat-slide-toggle></div>
                       <div class="caption-grid-item">Type</div>
                       <div class="input-grid-item">
-                        <select style="width:50%;" formControlName="type" (focus)="this.onFocusValidatorProperty()">                                                    
-                          <option>decimal(20,2)</option>
-                          <option>decimal(20,5)</option>
-                          <option>integer</option>
-                          <option>float</option>
-                          <option>tinytext</option>
-                          <option>text</option>
+                        <select style="width:50%;" formControlName="type" (focus)="this.onFocusValidatorProperty()" (change)="this.onChangeSelectIndexType()">                                                    
+                          <option *ngFor="let option of options" [value]="option.value" >{{option.viewValue}}</option>                        
                         </select>
                         <input type="hidden" formControlName="format" value="">
                       </div>
@@ -189,11 +186,11 @@
                       </div>
                       <div class="caption-grid-item">Min Length</div>
                       <div class="input-grid-item">
-                        <input type="number" min="0" [max]="this.jsonValidatorObject.maxLength" formControlName="minLength" value="" style="width:75px;"  (focus)="this.onFocusValidatorProperty()">
+                        <input type="number" min="0" [maxlength]="this.form.controls['maxLength'].value" formControlName="minLength" value="" style="width:75px;"  (focus)="this.onFocusValidatorProperty()">
                       </div>
                       <div class="caption-grid-item">Max Length</div>
                       <div class="input-grid-item">
-                        <input type="number" [min]="this.jsonValidatorObject.minLength" formControlName="maxLength" value="" style="width:75px;"  (focus)="this.onFocusValidatorProperty()">
+                        <input type="number" [min]="this.form.controls['minLength'].value" formControlName="maxLength" value="" style="width:75px;"  (focus)="this.onFocusValidatorProperty()">
                       </div>
                       <div class="caption-grid-item">Hint</div>
                       <div class="input-grid-item">
@@ -203,11 +200,11 @@
                       </div>
                       <div class="caption-grid-item">Min Value</div>
                       <div class="input-grid-item">
-                        <input type="number" formControlName="min" min="0" [max]="this.jsonValidatorObject.max" value="" style="width:50%;"  (focus)="this.onFocusValidatorProperty()">
+                        <input type="number" formControlName="min" min="0" [max]="this.form.controls['max'].value" value="" style="width:50%;"  (focus)="this.onFocusValidatorProperty()">
                       </div>
                       <div class="caption-grid-item">Max Value</div>
                       <div class="input-grid-item">
-                        <input type="number" formControlName="max" [min]="this.jsonValidatorObject.min" value="" style="width:50%;"  (focus)="this.onFocusValidatorProperty()">
+                        <input type="number" formControlName="max" [min]="this.form.controls['min'].value" value="" style="width:50%;"  (focus)="this.onFocusValidatorProperty()">
                       </div>
                       <div class="caption-grid-item">
                         &nbsp;
@@ -254,8 +251,7 @@
               </mat-tab-group>                                 
             </div>           
           </div>
-          <p>&nbsp;</p>   
-         
+          <p>&nbsp;</p>            
         </div>    
       </form>  
       </mat-tab>      

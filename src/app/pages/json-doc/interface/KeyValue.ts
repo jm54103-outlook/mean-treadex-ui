@@ -1,7 +1,7 @@
 import { Guid } from 'guid-typescript';
 
 export interface KeyValue {   
-  treeid: Guid;
+  object_id: Guid;
   id: Guid; 
   key: string;
   value: string;  
